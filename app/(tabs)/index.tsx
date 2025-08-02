@@ -1,75 +1,53 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Text, View, Image, ScrollView, TextInput, Alert, ActivityIndicator, FlatList } from "react-native";
+import { useMovies, usePopularMovies, usetrendingMovies } from "@/hooks/useMovies";
+import { MovieCard } from "@/components/MovieCard";
+import { Siege, SearchPlatform, allStats, Platform } from "@rainbow6/api";
+import { useEffect } from "react";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+export default function Index() {
 
-export default function HomeScreen() {
+  const { data: movieData, isLoading, isError, error } = usePopularMovies('')
+
+  const {data: trendingMoviesData, isLoading: isTrendingMovieDataLoading, isError: isTrendingMovieDataError, error: trendingMovieDataError } = usetrendingMovies();
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+    <View className="flex-1 items-center justify-start bg-white pt-20 px-1">
+      <Image
+        source={require("../../assets/images/movie-picker.png")}
+        className="w-20 h-20 mb-6"
+        resizeMode="contain"
+      />
+      {(isLoading || isTrendingMovieDataLoading) && <ActivityIndicator size="large" color="#3b82f6" />}
+      {(isError || isTrendingMovieDataError) && <Text className="text-red-500">{error?.message || trendingMovieDataError?.message}</Text>}
+
+      <Text className="text-base font-bold mb-8">Here is top trending Movies</Text>
+
+      <FlatList
+        data={trendingMoviesData}
+        horizontal
+        ItemSeparatorComponent={() => <View className="w-4" />}
+        showsHorizontalScrollIndicator={false}
+        keyExtractor={(item, index) => item.movie_id.toString() + index.toString()}
+        className="w-full mb-4"
+        renderItem={({ item, index }) => (
+          <MovieCard id={index} title={item.title} poster_path={item.posterUrl}/>
+        )}
+        contentContainerClassName="flex flex-row gap-x-4 px-2"
+      />
+
+      <Text className="text-base font-bold mb-8">Discover Movies</Text>
+        <FlatList
+          data={movieData}
+          numColumns={3}
+          keyExtractor={(item) => item.id}
+          columnWrapperStyle={{ justifyContent: 'space-between', gap: 12, marginBottom: 10, paddingRight: 5, paddingLeft: 5 }}
+          className="w-full"
+          renderItem={({ item }) => (
+            <MovieCard id={item.id} title={item.title} overview={item.overview} poster_path={item.poster_path} release_date={item.release_date} vote_average={item.vote_average} />
+          )}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      
+    </View>
+
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});

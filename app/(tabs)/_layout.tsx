@@ -1,45 +1,48 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import { Stack, Tabs } from "expo-router";
+import { Image } from "react-native";
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+export default function _Layout() {
+    return (
+        <Tabs>
+            <Tabs.Screen
+                name="index"
+                options={{
+                    headerShown: false,
+                    tabBarLabel: 'Home',
+                    tabBarIcon: ({ focused }) => (
+                        <Image source={require('../../assets/images/home.png')}
+                            className="w-8 h-8" />
+                    )
+                }}
+            />
+            <Tabs.Screen
+                name="search"
+                options={{
+                    headerShown: false,
+                    tabBarLabel: "Search",
+                    tabBarIcon: ({ focused }) => (
+                        <Image source={require('../../assets/images/search.png')}
+                            className="w-8 h-8" />
+                    )
+                }} />
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+            <Tabs.Screen
+                name="saved"
+                options={{
+                    headerShown: false, tabBarLabel: "Saved", tabBarIcon: ({ focused }) => (
+                        <Image source={require('../../assets/images/saved.png')}
+                            className="w-8 h-8" />
+                    )
+                }} />
 
-  return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-    </Tabs>
-  );
+            <Tabs.Screen
+                name="profile"
+                options={{
+                    headerShown: false, tabBarLabel: "Profile", tabBarIcon: ({ focused }) => (
+                        <Image source={require('../../assets/images/profile.png')}
+                            className="w-8 h-8" />
+                    )
+                }} />
+        </Tabs>
+    )
 }

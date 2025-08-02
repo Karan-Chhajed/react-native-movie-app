@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "movie",
-    "slug": "movie",
+    "name": "Movie Picker",
+    "slug": "movie-picker",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/movie-picker.png",
     "scheme": "movie",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,25 +13,25 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/movie-picker.png",
+        "backgroundColor": "#3b82f6"
       },
       "edgeToEdgeEnabled": true
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/movie-picker.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/movie-picker.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#3b82f6"
         }
       ]
     ],
