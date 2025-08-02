@@ -44,19 +44,3 @@ export const fetchMovieDetails = async (movie_id: string): Promise<Movie> => {
         throw new Error('Failed to fetch movie details');
     }
 }
-
-
-
-// const url = 'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc';
-// const options = {
-//   method: 'GET',
-//   headers: {
-//     accept: 'application/json',
-//     Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2ODA4Y2Y5ZDg0NWY2MTliYmM3Y2MyZDVjZDE2NzY0YiIsIm5iZiI6MTc1MzU1MDQ1My4zMzMsInN1YiI6IjY4ODUwZTc1MDlhOGY5ZGRjMDM4ZjkyOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Z9EMds4lhMKnEW16av2FYtLVtL8YZhchHvwGbx0Qxec'
-//   }
-// };
-
-// fetch(url, options)
-//   .then(res => res.json())
-//   .then(json => console.log(json))
-//   .catch(err => console.error(err));
