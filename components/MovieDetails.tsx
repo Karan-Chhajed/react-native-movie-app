@@ -11,8 +11,6 @@ interface MovieDetailsProps {
     }
 
 const MovieDetailsComponent:FC<MovieDetailsProps> = ({name, overview, poster_path, release_date, runtime, vote_average}) => {
-
-  console.log('Movie Details:', {name, poster_path});
   
   return (
     <View className="items-center bg-white mt-10">
