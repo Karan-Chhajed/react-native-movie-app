@@ -1,14 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchMovieDetails, fetchMovies } from "@/services/api";
-import { getTrendingMovies } from "@/services/appwrite";
+import { fetchMovieDetails, fetchMovies, fetchTrendingMovies } from "@/services/api";
+import { getSearchedMovies } from "@/services/appwrite";
 
 export const usePopularMovies = (query: string = '') => {
   return useQuery({
     queryKey: ['popularMovies'],
-    queryFn: () => fetchMovies({ query}), // Or hardcode endpoint
+    queryFn: () => fetchMovies({ query}),
     retry: 2,
   });
 };
+
+export const usetrendingMovies = (time_window: string) => {
+  return useQuery({
+    queryKey: ['trendingMovies', time_window],
+    queryFn: () => fetchTrendingMovies({time_window}),
+    retry: 2,
+    staleTime: 1000 * 60 * 60,
+  })
+}
 
 export const useMovies = (query: string) => {
   return useQuery({
@@ -19,16 +28,6 @@ export const useMovies = (query: string) => {
   });
 };
 
-export const usetrendingMovies = () => {
-  return useQuery({
-    queryKey: ['tredingMovies'],
-    queryFn: () => getTrendingMovies(),
-    retry: 2,
-    staleTime: 1000 * 60 * 60,
-  })
-}
-
-
 export const useMovieDetails = (movie_id: string) => {
   return useQuery({
     queryKey: ['movieDetails', movie_id],
@@ -37,5 +36,14 @@ export const useMovieDetails = (movie_id: string) => {
     enabled: !!movie_id, // Only fetch if movie_id is provided
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 60,
+  })
+}
+
+export const useSearchedData = () => {
+  return useQuery({
+    queryKey: ['Searched'],
+    queryFn: () => getSearchedMovies(),
+    retry: 2,
+    gcTime: 60 * 60 * 1000 * 2
   })
 }

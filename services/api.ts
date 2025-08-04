@@ -1,5 +1,4 @@
 import { Movie } from "@/interfaces";
-import { Siege } from "@rainbow6/api";
 
 export const TMDB_CONFIG = {
     BASE_URL: 'https://api.themoviedb.org/3',
@@ -26,6 +25,26 @@ export const fetchMovies = async({query } : {query: string}) => {
     return data.results;
 }
 
+export const fetchTrendingMovies = async ({time_window} : {time_window: string}) => {
+
+    try {
+         const endpoint = `${TMDB_CONFIG.BASE_URL}/trending/movie/${time_window}`
+    const response = await fetch(endpoint, {
+        method: 'GET',
+        headers: TMDB_CONFIG.headers
+    });
+
+    if(!response.ok) {
+        throw new Error('Failed to fetch trending movies', {cause: response.statusText})
+    }
+
+    const data = await response.json()
+    return data.results;
+    } catch (error) {
+        throw new Error('Failed to fetch the details')
+    }
+}
+
 export const fetchMovieDetails = async (movie_id: string): Promise<Movie> => {
 
     const endpoint = `${TMDB_CONFIG.BASE_URL}/movie/${movie_id}?api_key=${TMDB_CONFIG.API_KEY}&language=en-US`;
@@ -44,3 +63,48 @@ export const fetchMovieDetails = async (movie_id: string): Promise<Movie> => {
         throw new Error('Failed to fetch movie details');
     }
 }
+
+export const fetchTvData = async({query} : {query: string}) => {
+    
+    try {
+        const endpoint = !query.trim() ? `${TMDB_CONFIG.BASE_URL}/discover/tv` : `${TMDB_CONFIG.BASE_URL}/search/tv?query=${encodeURIComponent(query)}`
+
+        const response = await fetch(endpoint, {
+            method: 'GET',
+            headers: TMDB_CONFIG.headers
+        })
+
+        if(!response.ok) {
+            throw new Error('Error fetching TV data', {cause: response.statusText})
+        }
+
+        const data = await response.json()
+        return data.results;
+    } catch(error) {
+        throw new Error('Oops something went wrong' + ' ' + error)
+    }
+}
+
+export const fetchTrendingTvData = async ({query} : {query: string}) => {
+    try {
+
+        const endpoint = `${TMDB_CONFIG.BASE_URL}/trending/tv/${encodeURIComponent(query)}`
+        const response = await fetch(endpoint, {
+            method: 'GET',
+            headers: TMDB_CONFIG.headers
+        })
+
+        if(!response.ok) {
+            throw new Error(`Oops! Something went wrong`)
+        }
+
+        const data = await response.json()
+        return data.results;
+
+    } catch (error) {
+        throw new Error(`Error fetching trending tv series ${error}`)
+    }
+}
+
+
+
