@@ -3,7 +3,7 @@ import { FC } from "react";
 import { TouchableOpacity, Image, Text, View } from "react-native";
 import '../assets/images/star.png';
 
-interface MovieCardProps {
+interface VerticalMediaCardProps {
     id: number | string;
     title: string;
     release_date?: string;
@@ -13,7 +13,7 @@ interface MovieCardProps {
     type: string
 }
 
-export const MovieCard:FC<MovieCardProps> = ({id, title, release_date, vote_average, overview, poster_path, type  }) => {
+export const VerticalMediaCard:FC<VerticalMediaCardProps> = ({id, title, release_date, vote_average, overview, poster_path, type  }) => {
   return (
     <Link href={`/movies/${id}`} asChild>
         <TouchableOpacity className="w-36 h-56 flex-1 my-6">
