@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { fetchMovieDetails, fetchMovies, fetchTrendingMovies } from "@/services/api";
 import { getSearchedMovies } from "@/services/appwrite";
 
@@ -28,14 +28,15 @@ export const useMovies = (query: string) => {
   });
 };
 
-export const useMovieDetails = (movie_id: string) => {
+export const useMovieDetails = (movie_id: string, options?: Partial<UseQueryOptions<any>>) => {
   return useQuery({
     queryKey: ['movieDetails', movie_id],
     queryFn: () => fetchMovieDetails(movie_id),
     retry: 2,
-    enabled: !!movie_id, // Only fetch if movie_id is provided
+    enabled: !!movie_id,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 60,
+    ...options
   })
 }
 

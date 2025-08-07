@@ -30,39 +30,22 @@ export const updateSearchCount = async (query: string, media: Movie | TvSeries, 
         }
       )
     } else {
+      await databases.createDocument(
+        DATABASE_ID,
+        COLLECTION_ID,
+        ID.unique(),
+        {
+          searchTerm: query,
+          id: media.id,
+          count: 1,
+          title: media_type === 'Movie' ? (media as Movie).title : (media as TvSeries).name,
+          posterUrl: `https://image.tmdb.org/t/p/w500${media.poster_path}`,
+          overview: media.overview,
+          media_type: media_type,
+          vote_average: media.vote_average
+        }
+      );
 
-      if (media_type === 'Movie') {
-        await databases.createDocument(
-          DATABASE_ID,
-          COLLECTION_ID,
-          ID.unique(),
-          {
-            searchTerm: query,
-            id: media.id,
-            count: 1,
-            title: (media as Movie).title,
-            posterUrl: `https://image.tmdb.org/t/p/w500${media.poster_path}`,
-            overview: media.overview,
-            media_type: media_type,
-            vote_average: media.vote_average
-            
-          })
-      } else if (media_type === 'TV') {
-        await databases.createDocument(
-          DATABASE_ID,
-          COLLECTION_ID,
-          ID.unique(),
-          {
-            searchTerm: query,
-            id: media.id,
-            count: 1,
-            title: (media as TvSeries).name,
-            posterUrl: `https://image.tmdb.org/t/p/w500${media.poster_path}`,
-            overview: media.overview,
-            media_type: media_type,
-            vote_average: media.vote_average
-          })
-      }
     }
 
   } catch (error) {

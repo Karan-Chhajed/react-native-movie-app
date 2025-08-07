@@ -1,4 +1,3 @@
-import { Button } from "@react-navigation/elements";
 import React, { FC } from "react";
 import {View, Image, TextInput} from "react-native";
 
