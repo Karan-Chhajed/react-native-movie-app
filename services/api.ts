@@ -1,4 +1,4 @@
-import { Movie } from "@/interfaces";
+import { Movie, TvSeries } from "@/interfaces";
 
 export const TMDB_CONFIG = {
     BASE_URL: 'https://api.themoviedb.org/3',
@@ -104,6 +104,29 @@ export const fetchTrendingTvData = async ({query} : {query: string}) => {
     } catch (error) {
         throw new Error(`Error fetching trending tv series ${error}`)
     }
+}
+
+export const fetchTvDetails = async (series_id: string): Promise<TvSeries> => {
+
+    try{
+        const endpoint = `${TMDB_CONFIG.BASE_URL}/tv/${series_id}?api_key=${TMDB_CONFIG.API_KEY}&language=en-US`
+        const response = await fetch(endpoint, {
+            method: 'GET',
+            headers: TMDB_CONFIG.headers
+        })
+
+        if(!response.ok) {
+            throw new Error('Oops something went wrong')
+        }
+
+        const data = await response.json()
+
+        return data as TvSeries
+
+    } catch(error) {
+        throw new Error('Whoops!' + error)
+    }
+
 }
 
 

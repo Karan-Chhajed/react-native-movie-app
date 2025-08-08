@@ -1,17 +1,24 @@
-import { View, Text, FlatList, Image, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
 import React from 'react';
-import { MovieCard } from '@/components/MovieCard';
+import VerticalMediaCardWithLink from '@/components/VerticalMediaCardWithLink';
 import { useMovies, useSearchedData } from '@/hooks/useMovies';
 import SearchBar from '../../components/Search';
 import { updateSearchCount } from '@/services/appwrite';
-import { useQuery } from '@tanstack/react-query';
+import { useTv } from '@/hooks/useTv';
+
+import { MediaType } from '@/interfaces';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import HorizontalMediaCardWithLink from '@/components/HorizontalMediaCardWithLink';
 
 const Search = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [debouncedQuery, setDebouncedQuery] = React.useState('');
+  const [showHistory, setShowHistory] = React.useState<boolean>(true)
+  const [mediaType, setmediaType] = React.useState<MediaType>({ mediaType: 'Movie' })
 
-  const { data: prevSearchedMovieData, isLoading: isLoadingPrevData, isError: isErrorPrevData, error: prevDataError} = useSearchedData()
+  const { data: prevSearchedData, isLoading: isLoadingPrevData, isError: isErrorPrevData, error: prevDataError } = useSearchedData()
 
+  const insets = useSafeAreaInsets()
 
   React.useEffect(() => {
 
@@ -19,74 +26,90 @@ const Search = () => {
       setDebouncedQuery(searchQuery.trim());
     }, 1000);
 
-    return () => clearTimeout(handler); // clear on next type
+    return () => clearTimeout(handler)
   }, [searchQuery]);
 
-  const { data: searchedMovies, isLoading, isError, error } = useMovies(debouncedQuery)
+  const { data: searchedData, isLoading: isLoadingsearchedData, isError: isErrorsearchedData, error: searchedMovieError } = mediaType.mediaType === 'Movie' ? useMovies(debouncedQuery) : useTv(debouncedQuery)
 
   React.useEffect(() => {
-    if (searchedMovies && searchedMovies.length > 0 && searchedMovies[0]) {
-      updateSearchCount(debouncedQuery, searchedMovies[0])
+    if (searchedData && searchedData.length > 0 && searchedData[0]) {
+      updateSearchCount(debouncedQuery, searchedData[0], mediaType.mediaType)
     }
-  }, [searchQuery, searchedMovies]);
+  }, [searchQuery, searchedData]);
+
 
   return (
 
-    <View className="flex-1 items-center justify-center">
+    <SafeAreaView className="flex-1">
+      <View>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={searchedData}// Assuming searchedData is defined and contains the search results
+          numColumns={3}
+          keyExtractor={(item) => item.id.toString()}
+          columnWrapperStyle={{ justifyContent: 'space-between', gap: 10, marginBottom: 10, paddingRight: 5, paddingLeft: 5 }}
+          renderItem={({ item }) => (
+            <VerticalMediaCardWithLink
+              id={item.id}
+              title={'title' in item ? item.title : item.name}
+              overview={item.overview}
+              poster_path={item.poster_path}
+              release_date={'release_date' in item ? item.release_date : item.first_air_date}
+              vote_average={item.vote_average}
+              type={''}
+            />
 
-      {prevSearchedMovieData !== undefined && <FlatList 
+          )}
+          stickyHeaderIndices={[0]}
+          ListHeaderComponent={
+            <View className='mb-4 bg-white'>
+              <View className='w-full flex-row justify-center mt-20 items-center'>
+                <Image className="w-12 h-12 -mt-4" source={require('../../assets/images/search.png')} />
+              </View>
+              <View className='m-6 h-16'>
+                <SearchBar value={searchQuery}
+                  onChangeText={(text: string) => setSearchQuery(text)}
+                  onFocus={() => setShowHistory(false)}
+                  onBlur={() => {
+                    if (searchQuery.trim().length !== 0) {
+                      setShowHistory(false)
+                    } else {
+                      setShowHistory(true)
+                    }
+                  }}
+                />
+              </View>
+              <View className='flex flex-row gap-x-4  px-6 mb-2'>
+                <TouchableOpacity className={`w-24 h-10 disabled:bg-slate-400 bg-green-600 justify-center items-center rounded-2xl`} disabled={mediaType.mediaType === 'Movie'} onPressIn={() => setmediaType({ mediaType: 'Movie' })}><Text>Movies</Text></TouchableOpacity>
+                <TouchableOpacity className='w-24 h-10 disabled:bg-slate-400 justify-center bg-green-600 items-center rounded-2xl' disabled={mediaType.mediaType === 'TV'} onPressIn={() => setmediaType({ mediaType: 'TV' })}><Text>TV</Text></TouchableOpacity>
+              </View>
+
+              {isLoadingsearchedData && <ActivityIndicator size="large" color="#3b82f6" className='my-3' />}
+              {isErrorsearchedData && <Text className='text-red-500'>{`Something went wrong! ${isErrorsearchedData} `}</Text>}
+
+              <Text className='text-lg font-bold text-center my-3'>
+                {!(isErrorsearchedData) && !(isLoadingsearchedData) && searchQuery.trim() ? `Search Results for "${searchQuery}"` : 'Previous Search Results'}
+              </Text>
+
+
+            </View>
+          }
+        />
+      </View>
+      <View>
+        {(prevSearchedData !== undefined) && showHistory && <FlatList
+        className='px-6'
+        contentContainerStyle={{paddingBottom: insets.bottom + 250}}
         showsVerticalScrollIndicator={false}
-        data = {prevSearchedMovieData}
-        keyExtractor={(item) => item.movie_id}
-        renderItem={({item}) => (
-          <View>
-            <Text>
-                {item.title}
-            </Text>
-          </View>
+        data={prevSearchedData}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <HorizontalMediaCardWithLink name={item.title} poster_path={item.posterUrl} id={item.id} overview={item.overview} type={item.media_type} vote_average={item.vote_average} />
         )}
       />}
+      </View>
 
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={searchedMovies} // Assuming searchedMovies is defined and contains the search results
-        numColumns={3}
-        keyExtractor={(item) => item.id.toString()}
-        columnWrapperStyle={{ justifyContent: 'space-between', gap: 10, marginBottom: 10, paddingRight: 5, paddingLeft: 5 }}
-        renderItem={({ item }) => (
-          <MovieCard
-            id={item.id}
-            title={'title' in item ? item.title : item.name}
-            overview={item.overview}
-            poster_path={item.poster_path}
-            release_date={'release_date' in item ? item.release_date : item.first_air_date}
-            vote_average={item.vote_average}
-            type={''}
-          />
-        )}
-        stickyHeaderIndices={[0]} // To keep the header at the top
-        ListHeaderComponentStyle={{ backgroundColor: 'white', borderRadius: 10, marginBottom: 20, paddingLeft: 5, paddingRight: 5 }}
-        ListHeaderComponent={
-          <>
-            <View className='w-full flex-row justify-center mt-20 items-center'>
-              <Image className="w-12 h-12 -mt-4" source={require('../../assets/images/search.png')} />
-            </View>
-            <View className='my-5'>
-              <SearchBar value={searchQuery}
-                onChangeText={(text: string) => setSearchQuery(text)}
-              />
-            </View>
-            {isLoading && <ActivityIndicator size="large" color="#3b82f6" className='my-3' />}
-            {isError && <Text className='text-red-500'>{error.message}</Text>}
-            {!isError && !isLoading && searchQuery.trim() && (
-              <Text className='text-lg font-bold text-center my-3'>
-                Search Results for "{searchQuery}"
-              </Text>
-            )}
-          </>
-        }
-      />
-    </View>
+    </SafeAreaView>
 
   );
 }

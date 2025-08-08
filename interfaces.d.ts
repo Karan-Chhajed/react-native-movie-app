@@ -16,12 +16,19 @@ export interface Movie {
   runtime?: number;
 }
 
-export interface TrendingMovies {
+export interface MediaType {
+  mediaType: 'Movie' | 'TV'
+}
+
+export interface SearchedMedia {
     searchtTerm: string;
-    movie_id: string;
+    id: string;
     count: number;
     title: string; 
     posterUrl: string;
+    overview: string;
+    media_type: string;
+    vote_average:number;
 }
 
 export interface TvSeries {
@@ -30,6 +37,7 @@ export interface TvSeries {
   adult: boolean;
   backdrop_path: string;
   first_air_date: string;
+  last_air_date: string;
   overview: string
   poster_path: string
   vote_average: number;

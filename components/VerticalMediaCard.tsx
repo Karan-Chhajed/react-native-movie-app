@@ -1,10 +1,7 @@
-import { Link } from "expo-router";
 import { FC } from "react";
 import { TouchableOpacity, Image, Text, View } from "react-native";
-import '../assets/images/star.png';
 
-interface MovieCardProps {
-    id: number | string;
+interface VerticalMediaCardProps {
     title: string;
     release_date?: string;
     overview?: string;
@@ -13,10 +10,9 @@ interface MovieCardProps {
     type: string
 }
 
-export const MovieCard:FC<MovieCardProps> = ({id, title, release_date, vote_average, overview, poster_path, type  }) => {
-  return (
-    <Link href={`/movies/${id}`} asChild>
-        <TouchableOpacity className="w-36 h-56 flex-1 my-6">
+const VerticalMediaCard:FC<VerticalMediaCardProps> = ({title, release_date, poster_path, vote_average, type}) => {
+    return( 
+        <>
             <Image 
                 source={{ uri: poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : 'https://via.placeholder.com/150' }}
                 className="w-full h-40 rounded-lg mb-2"
@@ -31,7 +27,9 @@ export const MovieCard:FC<MovieCardProps> = ({id, title, release_date, vote_aver
                 {release_date && <Text className="text-xs text-gray-400 font-medium">{release_date.split('-')[0]}</Text>}
                 <Text className="text-xs text-gray-400 font-medium">{type}</Text>
             </View>
-        </TouchableOpacity>
-    </Link>
-  );
+            </>
+       
+    )
 }
+
+export default VerticalMediaCard
