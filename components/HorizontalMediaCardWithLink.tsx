@@ -13,7 +13,6 @@ interface HorizontalMediaCardProps {
 }
 
 const HorizontalMediaCardWithLink: FC<HorizontalMediaCardProps> = ({name, vote_average, overview, type, poster_path, id}) => {
-    console.log(name)
     if(type === 'MOVIE') {
         return(
             <Link href={`/movies/${id}`} className="py-4" asChild>

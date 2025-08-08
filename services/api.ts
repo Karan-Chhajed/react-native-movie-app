@@ -129,5 +129,24 @@ export const fetchTvDetails = async (series_id: string): Promise<TvSeries> => {
 
 }
 
+export const fetchWatchProviders = async (series_id: string, platform: 'tv' | 'movie') => {
+    try {
+        const endpoint = `${TMDB_CONFIG.BASE_URL}/${platform}/${series_id}/watch/providers`
+        const response = await fetch(endpoint, {
+            method: 'GET',
+            headers: TMDB_CONFIG.headers
+        })
+
+        if(!response.ok) {
+            throw new Error('Oops! Something went wrong')
+        }
+
+        const data = await response.json()
+        return data.results
+    } catch (error) {
+        throw new Error(`Oops! ${error}`)
+    }
+}
+
 
 
