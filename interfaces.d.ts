@@ -31,6 +31,13 @@ export interface SearchedMedia {
     vote_average:number;
 }
 
+export interface Network {
+  id: number,
+  logo_path: string,
+  name: string,
+  origin_country: string
+}
+
 export interface TvSeries {
   id: string;
   name: string;
@@ -46,4 +53,25 @@ export interface TvSeries {
   original_language: string;
   original_title: string;
   popularity: number;
+  networks: Network[]
+  genres: {
+    id: number,
+    name: string
+  }[]
+}
+
+export interface ProviderData {
+  provider_name: string,
+  logo_path: string
+  provider_name: string;
+  display_priority: number
+}
+
+export interface WatchData {
+  IN: {
+    link: string;
+    flatrate?: ProviderData[];
+    rent?: ProviderData[];
+    buy?:ProviderData[]
+  }
 }

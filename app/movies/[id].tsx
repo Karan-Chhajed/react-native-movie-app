@@ -1,4 +1,7 @@
+import { GenreComponent } from "@/components/GenreComponent";
+import { WhereToWatch } from "@/components/WhereToWatch";
 import { useMovieDetails } from "@/hooks/useMovies";
+import { useWatchProviders } from "@/hooks/useTv";
 import { Movie } from "@/interfaces";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { FC } from "react";
@@ -9,22 +12,33 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 const MovieDetails:FC<Movie> = () => {
 
   const { id } = useLocalSearchParams();
-  console.log(id)
+
 
   const {data: movieData, isLoading: isLoadingMovieData, isError: isErrorMovie, error: isMovieErrorData} = useMovieDetails(id as string );
- 
+
+  const {data: watchData, isLoading: isLoadingWatchData, isError: isErrorWatch, error: isWatchErrorData} = useWatchProviders(id as string, 'movie')
+
+  if(isLoadingMovieData || isLoadingWatchData) {
+    return(
+          <View className="flex-1 items-center justify-center bg-white">
+            <ActivityIndicator color='#3b82f6' size='large' />
+          </View>
+        )
+  }
+
+  if(isErrorMovie || isErrorWatch || !watchData || !movieData) {
+    const message = [isMovieErrorData?.message, isWatchErrorData?.message].filter(Boolean).join(' | ') || 'Something went wrong!'
+    return (
+      <View className="flex-1 items-center justify-center bg-white">
+              <Text className="text-red-500">{message}</Text>
+            </View>
+    )
+  }
   return (
     <SafeAreaProvider>
     <View className="flex-1 items-center justify-center bg-white">
       
       <ScrollView className="w-full mb-[4.5rem] -mt-10" contentOffset={{x: 0, y: 100}} showsVerticalScrollIndicator={false}>
-
-        {isLoadingMovieData && <ActivityIndicator color='#3b82f6' size='large'/>}
-        
-        {isErrorMovie && <Text className="text-red-500">{isMovieErrorData.message}</Text>}
-
-
-        {!isLoadingMovieData && !isErrorMovie && movieData  && (
            <View className="items-center bg-white mt-10 px-4">
                   <View className="w-screen rounded-lg">
                     <Image 
@@ -41,11 +55,11 @@ const MovieDetails:FC<Movie> = () => {
                           {movieData.title}
                         </Text>  
                       </View>
-                      <View className="flex-row items-center justify-between w-full">
-                        <View>
-                          <Text className="text-sm text-gray-400">{movieData.runtime} mins</Text>
+                      <View className="flex-row items-center justify-between w-full py-2">
+                        
+                          <Text className="text-sm text-gray-400 ">Runtime: {movieData.runtime} mins</Text>
                         {/* <Text className="text-sm text-gray-400">{movieDetailsData.release_date.split('-')[0] ?? 'N/A'}</Text> */}
-                        </View>
+                        
                         <View className="flex-row items-center justify-center gap-x-1">
                           <Image source={require('../../assets/images/star.png')} className="size-4"/>
                           <Text className="text-sm">{movieData.vote_average ? Math.round(movieData.vote_average / 2) : 'N/A'} / 5</Text>
@@ -56,11 +70,11 @@ const MovieDetails:FC<Movie> = () => {
                     <Text className="text-base font-semibold">Overview</Text>
                     <Text className="text-sm text-gray-600 mt-2">{movieData.overview}</Text>
                   </View>
-                  <View>
-
+                  <WhereToWatch watchData={watchData}/>
+                  <View className="w-full my-2">
+                      <GenreComponent genres={movieData.genres}/>
                   </View>
               </View>
-        )}
      
       </ScrollView>
       
