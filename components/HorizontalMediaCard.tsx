@@ -29,7 +29,7 @@ const HorizontalMediaCard: FC<HorizontalMediaCardProps> = ({ name, vote_average,
             </View>
             <View className="flex flex-row justify-between items-center my-2">
                 <Text>{type}</Text>
-                <Text className="text-sm">{vote_average ? Math.round(vote_average / 2) : 'N/A'}</Text>
+                <Text className="text-sm font-light">Tap to know more...</Text>
             </View>
         </>
     )

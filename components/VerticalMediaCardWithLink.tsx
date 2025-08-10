@@ -15,7 +15,9 @@ interface VerticalMediaCardProps {
 
 const VerticalMediaCardWithLink: FC<VerticalMediaCardProps> = ({ id, title, release_date, vote_average, overview, poster_path, type }) => {
 
-    if (type === 'MOVIE') {
+    const mediaType = type.toLowerCase()
+
+    if (mediaType === 'movie') {
         return (
             <Link href={`/movies/${id}`} asChild className="py-4">
                 <TouchableOpacity className="w-28 h-56 flex-1 my-6">
@@ -23,7 +25,7 @@ const VerticalMediaCardWithLink: FC<VerticalMediaCardProps> = ({ id, title, rele
                 </TouchableOpacity>
             </Link>
         )
-    } else if(type === 'TV') {
+    } else if(mediaType === 'tv') {
         return (
             <Link href={`/tv/${id}`} asChild className="py-4">
                 <TouchableOpacity className="w-28 h-56 flex-1 my-6">
@@ -32,6 +34,7 @@ const VerticalMediaCardWithLink: FC<VerticalMediaCardProps> = ({ id, title, rele
             </Link>
         )
     }
+    
 }
 
 export default VerticalMediaCardWithLink

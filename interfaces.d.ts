@@ -23,7 +23,6 @@ export interface MediaType {
 export interface SearchedMedia {
     searchtTerm: string;
     id: string;
-    count: number;
     title: string; 
     posterUrl: string;
     overview: string;
