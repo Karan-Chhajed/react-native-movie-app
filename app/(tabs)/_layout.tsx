@@ -27,7 +27,7 @@ export default function _Layout() {
                 }} />
 
             <Tabs.Screen
-                name="saved"
+                name="watchlist"
                 options={{
                     headerShown: false, tabBarLabel: "Saved", tabBarIcon: ({ focused }) => (
                         <Image source={require('../../assets/images/saved.png')}

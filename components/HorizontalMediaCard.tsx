@@ -3,13 +3,13 @@ import { View, Image, Text, } from "react-native";
 
 interface HorizontalMediaCardProps {
     name: string;
-    vote_average?: number;
+    
     overview?: string;
     poster_path: string;
     type?: string
 }
 
-const HorizontalMediaCard: FC<HorizontalMediaCardProps> = ({ name, vote_average, overview, poster_path, type }) => {
+const HorizontalMediaCard: FC<HorizontalMediaCardProps> = ({ name, overview, poster_path, type }) => {
     return (
         <>
             <View className="flex flex-row items-start gap-6">

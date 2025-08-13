@@ -26,7 +26,17 @@ export interface SearchedMedia {
     title: string; 
     posterUrl: string;
     overview: string;
-    media_type: string;
+    media_type: MediaType;
+    vote_average:number;
+}
+
+
+export interface SavedMedia {
+    id: string;
+    title: string; 
+    posterUrl: string;
+    overview: string;
+    media_type: string; // 'Movie' | 'TV'
     vote_average:number;
 }
 

@@ -1,8 +1,10 @@
-import { Movie, SearchedMedia, TvSeries } from '@/interfaces';
+import { Movie, SavedMedia, SearchedMedia, TvSeries } from '@/interfaces';
 import { Client, Databases, ID, Query } from 'react-native-appwrite';
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
+
+const SAVED_MEDIA_COLLECTION_ID = process.env.EXPO_PUBLIC_SAVED_MEDIA_COLLECTION_ID!;
 
 const client = new Client()
   .setEndpoint('https://nyc.cloud.appwrite.io/v1')
@@ -54,5 +56,49 @@ export const getSearchedMovies = async (): Promise<SearchedMedia[] | undefined> 
   } catch (error) {
     console.log(error)
     return undefined
+  }
+}
+
+export const saveMediaToWatchlist = async (media: SavedMedia) => {
+
+  try {
+    await databases.createDocument(
+      DATABASE_ID,
+      SAVED_MEDIA_COLLECTION_ID,
+      ID.unique(),{
+        id: media.id,
+        title: media.title,
+        posterUrl: `https://image.tmdb.org/t/p/w500${media.posterUrl}`,
+        overview: media.overview,
+        media_type: media.media_type,
+        vote_average: media.vote_average     
+      }
+    )
+  } catch (error) {
+    throw new Error(`Failed to save movie to watchlist. ${error}`)
+  }
+}
+
+export const deleSavedMedia = async (id: string) => {
+  try {
+    await databases.deleteDocument(
+      DATABASE_ID,
+      SAVED_MEDIA_COLLECTION_ID,
+      id)
+  } catch (error) {
+    throw new Error(`Failed to fetch movie details ${error}`)
+  }
+}
+
+export const getSavedMedia = async ({pageParam = 0, limit = 10}: {pageParam?: number, limit?: number}): Promise<SavedMedia[]> => {
+  try {
+    const result = await databases.listDocuments(DATABASE_ID, SAVED_MEDIA_COLLECTION_ID, [
+      Query.limit(limit),
+      Query.offset((pageParam -1) * limit)
+    ])
+    return result.documents as unknown as SavedMedia[]
+  } catch (error) {
+    console.error('Error fetching saved media:', error);
+    return [];
   }
 }

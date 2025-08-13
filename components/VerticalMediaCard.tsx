@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { TouchableOpacity, Image, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 
 interface VerticalMediaCardProps {
     title: string;

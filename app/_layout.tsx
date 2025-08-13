@@ -2,9 +2,9 @@ import { Stack } from "expo-router";
 import './globals.css';
 import {QueryClientProvider, QueryClient} from "@tanstack/react-query";
 
-export default function RootLayout() {
+const queryClient = new QueryClient();
 
-  const queryClient = new QueryClient();
+export default function RootLayout() {
 
   return (
   <QueryClientProvider client={queryClient}>

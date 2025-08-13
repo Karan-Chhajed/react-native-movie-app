@@ -1,11 +1,12 @@
 import { GenreComponent } from "@/components/GenreComponent";
 import { WhereToWatch } from "@/components/WhereToWatch";
 import { useMovieDetails } from "@/hooks/useMovies";
+import { useAddToWatchlist } from "@/hooks/useMutations";
 import { useWatchProviders } from "@/hooks/useTv";
-import { Movie } from "@/interfaces";
+import { Movie, MediaType } from "@/interfaces";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { FC } from "react";
-import {View, Text, ScrollView, ActivityIndicator, Image, TouchableOpacity} from "react-native";
+import {View, Text, ScrollView, ActivityIndicator, Image, TouchableOpacity, Pressable, Button} from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 
@@ -13,10 +14,11 @@ const MovieDetails:FC<Movie> = () => {
 
   const { id } = useLocalSearchParams();
 
-
   const {data: movieData, isLoading: isLoadingMovieData, isError: isErrorMovie, error: isMovieErrorData} = useMovieDetails(id as string );
 
   const {data: watchData, isLoading: isLoadingWatchData, isError: isErrorWatch, error: isWatchErrorData} = useWatchProviders(id as string, 'movie')
+
+  const {mutate: addToWatchlist} = useAddToWatchlist();
 
   if(isLoadingMovieData || isLoadingWatchData) {
     return(
@@ -33,12 +35,13 @@ const MovieDetails:FC<Movie> = () => {
               <Text className="text-red-500">{message}</Text>
             </View>
     )
-  }
+  }  
+
   return (
     <SafeAreaProvider>
     <View className="flex-1 items-center justify-center bg-white">
       
-      <ScrollView className="w-full mb-[4.5rem] -mt-10" contentOffset={{x: 0, y: 100}} showsVerticalScrollIndicator={false}>
+      <ScrollView className="w-full mb-[4.5rem] -mt-10" contentOffset={{x: 0, y: 100}} showsVerticalScrollIndicator={false} >
            <View className="items-center bg-white mt-10 px-4">
                   <View className="w-screen rounded-lg">
                     <Image 
@@ -54,6 +57,18 @@ const MovieDetails:FC<Movie> = () => {
                         <Text className="text-lg font-bold">
                           {movieData.title}
                         </Text>  
+                        <Button  
+                        title="Add to Watchlist"
+                        onPress={() => addToWatchlist({
+                          id: movieData.id,
+                          title: movieData.title,
+                          posterUrl: `https://image.tmdb.org/t/p/w500${movieData.poster_path}`,
+                          overview: movieData.overview,
+                          media_type: 'Movie',
+                          vote_average: movieData.vote_average
+                        })}/>
+                        
+                        
                       </View>
                       <View className="flex-row items-center justify-between w-full py-2">
                         
