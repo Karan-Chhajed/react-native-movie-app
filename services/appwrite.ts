@@ -80,13 +80,41 @@ export const saveMediaToWatchlist = async (media: SavedMedia) => {
 }
 
 export const deleSavedMedia = async (id: string) => {
+  console.log(id)
   try {
     await databases.deleteDocument(
       DATABASE_ID,
       SAVED_MEDIA_COLLECTION_ID,
-      id)
+      id  )
+      
   } catch (error) {
     throw new Error(`Failed to fetch movie details ${error}`)
+  }
+}
+
+export const saveMediaExists = async (id: number): Promise<{isSaved: boolean, docId: string}> => {
+  try {
+    const result = await databases.listDocuments(DATABASE_ID, SAVED_MEDIA_COLLECTION_ID, [
+      Query.equal('id', id)
+    ])
+    if(result.documents.length > 0) {
+      const documentId = result.documents[0].$id
+      return {
+        isSaved: true,
+        docId: documentId
+      }
+      
+    }
+    return {
+        isSaved: false,
+        docId: ''
+      }
+  } catch (error) {
+    console.error('Error checking saved media:', error);
+    return {
+      isSaved: false,
+      docId: ''
+    };
   }
 }
 

@@ -1,5 +1,5 @@
 import { SavedMedia } from "@/interfaces";
-import { getSavedMedia } from "@/services/appwrite"
+import { getSavedMedia, saveMediaExists } from "@/services/appwrite"
 import { InfiniteData, useInfiniteQuery, useQuery } from "@tanstack/react-query"
 
 export const useFetchSaved = () => {
@@ -12,5 +12,14 @@ export const useFetchSaved = () => {
             if (!lastPage || lastPage.length < limit) return undefined;
             return allPages.length + 1;
         },
+    });
+}
+
+export const useSavedMediaExists = (id: number) => {
+    return useQuery({
+        queryKey: ['savedMediaExists', id],
+        queryFn: () => saveMediaExists(id),
+        enabled: !!id,
+        refetchOnWindowFocus: false,
     });
 }

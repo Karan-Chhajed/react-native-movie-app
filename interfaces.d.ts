@@ -32,6 +32,7 @@ export interface SearchedMedia {
 
 
 export interface SavedMedia {
+    
     id: string;
     title: string; 
     posterUrl: string;
