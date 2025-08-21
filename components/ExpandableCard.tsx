@@ -1,54 +1,79 @@
-import { MediaType } from "@/interfaces";
-import { FC } from "react";
-import { View, Image, Text, TouchableOpacity, Pressable } from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from "react-native-reanimated";
+import { useRemoveFromWatchlist } from "@/hooks/useMutations";
+import { Link } from "expo-router";
+import React, { FC } from "react";
+import {
+  View,
+  Image,
+  Text,
+  ImageBackground,
+  TouchableOpacity,
+} from "react-native";
 
-
-interface ExpandableCardProps {
-    name: string;
-    overview: string;
-    posterUrl: string;
-    mediaType: string
-    vote_average: number
+interface SavedMovieCardProps {
+  name: string;
+  mediaType: string;
+  vote_average: number;
+  genres: string;
+  posterUrl: string;
+  id: string | number;
 }
 
-const ExpandableCard: FC<ExpandableCardProps> = ({ name, overview, posterUrl, mediaType, vote_average }) => {
+const SavedMovieCard: FC<SavedMovieCardProps> = ({
+  name,
+  mediaType,
+  vote_average,
+  genres,
+  posterUrl,
+  id,
+}) => {
+  const genreArray = genres.split(", ").map((genre) => genre.trim());
 
-    const expanded = useSharedValue(false)
+   const { mutate: removeFromWatchlist } = useRemoveFromWatchlist();
 
-    const toggleCard = () => {
-        expanded.value = !expanded.value
-    }
-
-    const animateCard = useAnimatedStyle(() => {
-        return {
-            height: withSpring(expanded.value ? 200 : 100),
-            padding: withSpring(expanded.value ? 16 : 8)
-        }
-    })
-
-    return (
-        <Pressable onPress={toggleCard}>
-        <View className='w-full flex flex-col'>
-            <Image source={{ uri: posterUrl }} />
-            <View className='flex flex-row'>
-                <Text className='font-semibold text-sm'>{name}</Text>
-                <Text className='font-normal text-sm'>{overview}</Text>
+  return (
+    <Link href={mediaType === "Movie" ? `/movies/${id}` : `/tv/${id}`} asChild>
+      <TouchableOpacity className="w-full">
+        <ImageBackground
+          source={{ uri: `https://image.tmdb.org/t/p/w500${posterUrl}` }}
+          className="w-full border border-gray-400 gap-6 my-2 p-2 bg-slate-400 rounded-2xl h-44"
+          imageStyle={{ borderRadius: 12 }}
+        >
+            <View className="flex-1 justify-between">
+          <View className="flex flex-row items-center justify-between">
+            <Text className="font-semibold text-xl bg-slate-300 px-1 rounded-lg">
+              {name}{" "}
+              <Text className="font-light text-base">({mediaType})</Text>{" "}
+            </Text>
+            <View className="flex flex-row items-center justify-center gap-x-1 bg-slate-300 rounded-xl p-0.5">
+              <Text className="p-1">{Math.round(vote_average / 2)}</Text>
+              <Image
+                source={require("../assets/images/star.png")}
+                className="size-4"
+              />
             </View>
-        </View>
-        <View className="w-full flex flex-col">
-            <Text>{mediaType}</Text>
-            <View className="flex-row items-center justify-start gap-x-1">
-                <Text className="text-sm">{vote_average ? Math.round(vote_average / 2) : 'N/A'}</Text>
-                <Image source={require('../assets/images/star.png')} className="size-4"/>
+          </View>
+        <View className="flex flex-row justify-between items-center">
+          <View className="flex flex-row flex-wrap gap-2">
+            {genreArray.map((item, index) => (
+              <Text
+                key={index}
+                className="text-sm bg-slate-300 py-1 px-2 rounded-xl"
+              >
+                {item}
+              </Text>
+            ))}
             </View>
-        </View>
-        </Pressable>
-    )
-}
+            <TouchableOpacity onPress={() => {removeFromWatchlist(id as string)
+            }} className="h-6 w-6 bg-red-600 rounded-full">
+                <Text className="text-white text-center">-</Text>
+            </TouchableOpacity>
+            
+          </View>
+          </View>
+        </ImageBackground>
+      </TouchableOpacity>
+    </Link>
+  );
+};
 
-export default ExpandableCard
+export default SavedMovieCard;

@@ -7,9 +7,9 @@ import {
   useRemoveFromWatchlist,
 } from "@/hooks/useMutations";
 import { useWatchProviders } from "@/hooks/useTv";
-import { Movie } from "@/interfaces";
+import { Movie, Genres } from "@/interfaces";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import {
   View,
   Text,
@@ -17,13 +17,10 @@ import {
   ActivityIndicator,
   Image,
   TouchableOpacity,
-  Button,
 } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const MovieDetails: FC<Movie> = () => {
-
- 
 
   const { id } = useLocalSearchParams();
 
@@ -49,11 +46,12 @@ const MovieDetails: FC<Movie> = () => {
 
   const { mutate: addToWatchlist } = useAddToWatchlist();
 
-  const { mutate: removeFromWatchlist, } = useRemoveFromWatchlist();
+  const { mutate: removeFromWatchlist } = useRemoveFromWatchlist();
+  
 
   if (isLoadingMovieData || isLoadingWatchData) {
     return (
-      <View className="flex-1 items-center justify-center bg-white">
+      <View className="flex-1 items-center justify-center">
         <ActivityIndicator color="#3b82f6" size="large" />
       </View>
     );
@@ -70,23 +68,23 @@ const MovieDetails: FC<Movie> = () => {
         .filter(Boolean)
         .join(" | ") || "Something went wrong!";
     return (
-      <View className="flex-1 items-center justify-center bg-white">
+      <View className="flex-1 items-center justify-center">
         <Text className="text-red-500">{message}</Text>
       </View>
     );
   }
 
-   const [watchlisBtnState, setWatchlistBtnState] = useState<boolean>()
+  const genresFlatData = movieData.genres.map((genre: Genres) => (genre.name)).join(", ")
 
   return (
     <SafeAreaProvider>
-      <View className="flex-1 items-center justify-center bg-white">
+      <View className="flex-1 items-center justify-center ">
         <ScrollView
           className="w-full mb-[4.5rem] -mt-10"
           contentOffset={{ x: 0, y: 100 }}
           showsVerticalScrollIndicator={false}
         >
-          <View className="items-center bg-white mt-10 px-4">
+          <View className="items-center  mt-10 px-4">
             <View className="w-screen rounded-lg">
               <Image
                 source={{
@@ -108,13 +106,13 @@ const MovieDetails: FC<Movie> = () => {
                   <>
                     <ActivityIndicator size="small" color="#3b82f6" />
                   </>
-                ) : isSavedData && !isErrorSavedExists ? (
+                ) :
                   <TouchableOpacity
-                    className={`rounded-lg border border-gray-400 ${isSavedData.isSaved || watchlisBtnState ? "bg-green-500" : "bg-white"}`}
+                    className={`rounded-lg border border-gray-400 ${isSavedData ? "bg-green-500" : ""}`}
                     onPress={() => {
-                      if (isSavedData.isSaved ) {
-                        removeFromWatchlist(isSavedData.docId);
-                        setWatchlistBtnState(false)
+                      if (isSavedData ) {
+                        removeFromWatchlist(id as string);
+                      
                       } else {
                         addToWatchlist({
                           id: movieData.id,
@@ -123,14 +121,15 @@ const MovieDetails: FC<Movie> = () => {
                           overview: movieData.overview,
                           media_type: "Movie",
                           vote_average: movieData.vote_average,
+                          genres: genresFlatData
                         });
-                        setWatchlistBtnState(true)
+                       
                       }
                     }}
                   >
                     <Text className="text-sm font-light">Watchlist</Text>
                   </TouchableOpacity>
-                ) : null}
+                }
               </View>
               <View className="flex-row items-center justify-between w-full py-2">
                 <Text className="text-sm text-gray-400 ">

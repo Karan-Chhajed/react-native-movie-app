@@ -16,7 +16,7 @@ export default function Index() {
   const { data: trendingTvData, isLoading: isLoadingTvData, isError: isTrendingTvError, error: trendingTvError } = useTrendingTvSeries('day')
 
   return (
-    <View className="flex-1 items-center justify-start bg-white pt-20 px-4">
+    <View className="flex-1 items-center justify-start pt-20 px-4">
       <Image
         source={require("../../assets/images/movie-picker.png")}
         className="w-20 h-20 mb-6"

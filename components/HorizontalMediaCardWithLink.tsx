@@ -5,27 +5,26 @@ import { TouchableOpacity } from "react-native";
 
 interface HorizontalMediaCardProps {
     name: string;
-    vote_average?: number;
     overview?: string;
     type: string;
     poster_path: string;
     id: string | number;
 }
 
-const HorizontalMediaCardWithLink: FC<HorizontalMediaCardProps> = ({name, vote_average, overview, type, poster_path, id}) => {
+const HorizontalMediaCardWithLink: FC<HorizontalMediaCardProps> = ({name, overview, type, poster_path, id}) => {
    
     if(type === 'MOVIE') {
         return(
             <Link href={`/movies/${id}`} className="p-4 " asChild>
                 <TouchableOpacity className="w-full">
-                    <HorizontalMediaCard name={name} poster_path={poster_path} vote_average={vote_average} type={type} overview={overview} />
+                    <HorizontalMediaCard name={name} poster_path={poster_path}  type={type} overview={overview} />
                 </TouchableOpacity>
             </Link>
         ) }
         return(
             <Link href={`/tv/${id}`} asChild className="p-4">
                 <TouchableOpacity className="w-full">
-                <HorizontalMediaCard name={name} poster_path={poster_path} vote_average={vote_average} type={type} overview={overview} />
+                <HorizontalMediaCard name={name} poster_path={poster_path} type={type} overview={overview} />
                 </TouchableOpacity>
             </Link>
         )

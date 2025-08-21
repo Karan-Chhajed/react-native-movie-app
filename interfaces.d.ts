@@ -14,7 +14,13 @@ export interface Movie {
   vote_average: number;
   vote_count: number;
   runtime?: number;
+  genres: Genres[]
 }
+
+export interface Genres {
+      id: number,
+      name: string
+    }
 
 export interface MediaType {
   mediaType: 'Movie' | 'TV'
@@ -31,14 +37,17 @@ export interface SearchedMedia {
 }
 
 
+
 export interface SavedMedia {
-    
+    $id?: string;
+    createdAt?: string;
     id: string;
     title: string; 
-    posterUrl: string;
     overview: string;
+    posterUrl: string;
     media_type: string; // 'Movie' | 'TV'
     vote_average:number;
+    genres: string
 }
 
 export interface Network {

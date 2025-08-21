@@ -38,8 +38,8 @@ const Search = () => {
   const shouldShowHistory = showHistory || searchQuery.trim().length === 0;
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
-      <View className=' bg-white'>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#000000" }} edges={['bottom']}>
+      <View className=''>
         <View className='w-full flex-row justify-center mt-20 items-center'>
           <Image className="w-12 h-12 -mt-4" source={require('../../assets/images/search.png')} />
         </View>
