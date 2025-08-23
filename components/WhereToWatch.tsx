@@ -12,8 +12,8 @@ export const WhereToWatch: FC<WatchDataProps> = ({ watchData }) => {
     if (!watchData.IN) {
         return (
             <View className="flex flex-row my-2 items-center justify-start w-full gap-x-3">
-                <Text className="text-sm font-medium">Where To Watch:</Text>
-                <Text className="text-sm font-light">Not available in your country</Text>
+                <Text className="text-sm font-medium text-white">Where To Watch:</Text>
+                <Text className="text-sm font-light text-white">Not available in your country</Text>
             </View>
         )
     }

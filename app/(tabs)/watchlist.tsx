@@ -40,8 +40,8 @@ const WatchList: FC = () => {
           data={flatSaveData}
           keyExtractor={(item) => item.id}
           stickyHeaderIndices={[0]}
-          ListHeaderComponent={ <View className=" py-4">
-    <Text className="text-center text-xl font-semibold">Your Watch List</Text>
+          ListHeaderComponent={ <View className=" pb-4">
+    <Text className="text-center text-xl font-semibold text-white">Your Watch List</Text>
   </View>}
           renderItem={({ item }) => {
             return ( 

@@ -13,7 +13,7 @@ interface HorizontalMediaCardProps {
 
 const HorizontalMediaCardWithLink: FC<HorizontalMediaCardProps> = ({name, overview, type, poster_path, id}) => {
    
-    if(type === 'MOVIE') {
+    if(type === 'movie') {
         return(
             <Link href={`/movies/${id}`} className="p-4 " asChild>
                 <TouchableOpacity className="w-full">
@@ -21,13 +21,14 @@ const HorizontalMediaCardWithLink: FC<HorizontalMediaCardProps> = ({name, overvi
                 </TouchableOpacity>
             </Link>
         ) }
+        else if(type === 'tv') {
         return(
             <Link href={`/tv/${id}`} asChild className="p-4">
                 <TouchableOpacity className="w-full">
                 <HorizontalMediaCard name={name} poster_path={poster_path} type={type} overview={overview} />
                 </TouchableOpacity>
             </Link>
-        )
+        )}
     }
      
 

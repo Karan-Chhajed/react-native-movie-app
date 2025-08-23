@@ -5,11 +5,13 @@ export default function _Layout() {
     return (
         <Tabs screenOptions={{
             tabBarStyle: {
-                backgroundColor: 'black',
-                borderTopWidth: 0
+                backgroundColor: 'transparent',
+                borderTopWidth: 0,
+                height: 65,
+                paddingBottom: 1
             },
             tabBarActiveTintColor: 'white',
-            tabBarInactiveTintColor: 'red'
+            tabBarInactiveTintColor: 'red',            
         }}>
             <Tabs.Screen
                 name="index"
@@ -44,9 +46,9 @@ export default function _Layout() {
                 }} />
 
             <Tabs.Screen
-                name="profile"
+                name="review"
                 options={{
-                    headerShown: false, tabBarLabel: "Profile", tabBarIcon: ({ focused, color }) => (
+                    headerShown: false, tabBarLabel: "Review", tabBarIcon: ({ focused, color }) => (
                         <Image source={require('../../assets/images/profile.png')}
                             className="w-8 h-8" tintColor={color}/>
                     )

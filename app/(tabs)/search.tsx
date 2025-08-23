@@ -14,7 +14,7 @@ const Search = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [debouncedQuery, setDebouncedQuery] = React.useState('');
   const [showHistory, setShowHistory] = React.useState<boolean>(true)
-  const [mediaType, setmediaType] = React.useState<MediaType>({ mediaType: 'Movie' })
+  const [mediaType, setmediaType] = React.useState<string>('movie')
 
   const insets = useSafeAreaInsets()
 
@@ -27,11 +27,11 @@ const Search = () => {
     return () => clearTimeout(handler)
   }, [searchQuery]);
 
-  const { data: searchedData, isLoading: isLoadingsearchedData, isError: isErrorsearchedData, error: searchedMovieError } = mediaType.mediaType === 'Movie' ? useMovies(debouncedQuery) : useTv(debouncedQuery)
+  const { data: searchedData, isLoading: isLoadingsearchedData, isError: isErrorsearchedData, error: searchedMovieError } = mediaType === 'movie' ? useMovies(debouncedQuery) : useTv(debouncedQuery)
 
   React.useEffect(() => {
     if (searchedData && searchedData.length > 0 && searchedData[0]) {
-      checkSearchData(debouncedQuery, searchedData[0], mediaType.mediaType)
+      checkSearchData(debouncedQuery, searchedData[0], mediaType)
     }
   }, [searchQuery, searchedData]);
 
@@ -40,8 +40,9 @@ const Search = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#000000" }} edges={['bottom']}>
       <View className=''>
-        <View className='w-full flex-row justify-center mt-20 items-center'>
-          <Image className="w-12 h-12 -mt-4" source={require('../../assets/images/search.png')} />
+        <View className='w-full flex-row justify-center items-center gap-x-4'>
+          <Image className="w-12 h-12" source={require('../../assets/images/search.png')} tintColor={'red'}/>
+          <Text className='text-red-600 text-2xl'>Find what to watch!</Text>
         </View>
         <View className='m-6 h-16'>
           <SearchBar value={searchQuery}
@@ -57,13 +58,13 @@ const Search = () => {
           />
         </View>
         <View className='flex flex-row gap-x-4 px-4 mb-2'>
-          <TouchableOpacity className={`w-24 h-10 disabled:bg-slate-400 bg-green-600 justify-center items-center rounded-2xl`} disabled={mediaType.mediaType === 'Movie'} onPressIn={() => setmediaType({ mediaType: 'Movie' })}><Text>Movies</Text></TouchableOpacity>
-          <TouchableOpacity className='w-24 h-10 disabled:bg-slate-400 justify-center bg-green-600 items-center rounded-2xl' disabled={mediaType.mediaType === 'TV'} onPressIn={() => setmediaType({ mediaType: 'TV' })}><Text>TV</Text></TouchableOpacity>
+          <TouchableOpacity className={`w-24 h-10 disabled:bg-red-600 bg-white justify-center items-center rounded-2xl`} disabled={mediaType === 'movie'} onPressIn={() => setmediaType('movie')}><Text>Movies</Text></TouchableOpacity>
+          <TouchableOpacity className='w-24 h-10 disabled:bg-red-600 justify-center bg-white items-center rounded-2xl' disabled={mediaType === 'tv'} onPressIn={() => setmediaType('tv')}><Text>TV</Text></TouchableOpacity>
         </View>
 
         {isErrorsearchedData && <Text className='text-red-500'>{`Something went wrong! ${isErrorsearchedData} `}</Text>}
 
-        <Text className='text-lg font-bold text-center my-3 flex flex-row'>
+        <Text className='text-lg font-bold text-center my-3 flex flex-row text-white'>
           {!(isErrorsearchedData) && !(isLoadingsearchedData) && searchQuery.trim() ? `Search Results for "${searchQuery}"` : isLoadingsearchedData ? `Searching for ${searchQuery}` : 'Previous Search Results'}
           {isLoadingsearchedData && <ActivityIndicator color="#3b82f6" className='m-3' />}
         </Text>
@@ -86,7 +87,7 @@ const Search = () => {
                 poster_path={item.poster_path}
                 release_date={'release_date' in item ? item.release_date : item.first_air_date}
                 vote_average={item.vote_average}
-                type={mediaType.mediaType}
+                type={mediaType}
               />
             )}
           />

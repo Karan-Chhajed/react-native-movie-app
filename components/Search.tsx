@@ -10,12 +10,13 @@ interface SearchBarProps {
 
 const SearchBar:FC<SearchBarProps> = ({ value, onChangeText, onFocus, onBlur}) => {
   return (
-    <View className="flex flex-row items-center justify-center bg-slate-400 p-2 rounded-lg w-full flex-1">
+    <View className="flex flex-row items-center justify-center bg-white p-2 rounded-lg w-full flex-1">
         <Image source={require('../assets/images/search.png')}
-            tintColor="#3b82f6" style={{width: 30, height: 30}}/>
+            tintColor="red" style={{width: 30, height: 30}}/>
         <TextInput
             placeholder="Search for movies..."
-            className="rounded-lg p-2 min-h-14"
+            placeholderTextColor={'gray'}
+            className="rounded-lg p-2 min-h-14 text-black"
             style={{width: '80%', marginLeft: 10}}
             // onPress={onPress}
             value={value}

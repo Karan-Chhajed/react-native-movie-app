@@ -18,7 +18,7 @@ import {
   TouchableOpacity,
 
 } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 const TvDetails: FC<TvSeries> = () => {
   const { id } = useLocalSearchParams();
@@ -71,8 +71,8 @@ const TvDetails: FC<TvSeries> = () => {
   const genresFlatData = tvData.genres.map(genre => (genre.name)).join(", ")
 
   return (
-    <SafeAreaProvider>
-      <View className="flex-1 items-center justify-center ">
+    <SafeAreaView className="bg-black flex-1">
+      <View className=" items-center justify-center ">
         <ScrollView
           className="w-full mb-[4.5rem] -mt-10"
           contentOffset={{ x: 0, y: 100 }}
@@ -93,7 +93,7 @@ const TvDetails: FC<TvSeries> = () => {
             </View>
 
             <View className="mt-2 flex-row items-center justify-between w-full">
-              <Text className="text-lg font-bold">{tvData.name}</Text>
+              <Text className="text-lg font-bold text-white">{tvData.name}</Text>
               {isLoadingSavedExists ? (
                 <>
                   <ActivityIndicator size="small" color="#3b82f6" />
@@ -117,13 +117,13 @@ const TvDetails: FC<TvSeries> = () => {
                     }
                   }}
                 >
-                  <Text className="text-sm font-light">Watchlist</Text>
+                  <Text className="text-sm font-light text-white">Watchlist</Text>
                 </TouchableOpacity>
               )}
             </View>
             <View className="mt-4">
               <View className="flex-row items-center justify-between w-full">
-                <Text className="text-base font-semibold">Overview</Text>
+                <Text className="text-base font-semibold text-white">Overview</Text>
                 <Text className="text-sm text-gray-400">{`Release Date: ${tvData.first_air_date.split("-")[0]}`}</Text>
               </View>
               <Text className="text-sm text-gray-600 mt-2">
@@ -134,7 +134,7 @@ const TvDetails: FC<TvSeries> = () => {
             <WhereToWatch watchData={watchData} />
 
             <View className="flex flex-row w-full py-2 gap-x-2 items-center justify-start">
-              <Text className="text-sm font-medium">Original Network:</Text>
+              <Text className="text-sm font-medium text-white">Original Network:</Text>
               <Image
                 source={{
                   uri: tvData.networks[0].logo_path
@@ -149,13 +149,13 @@ const TvDetails: FC<TvSeries> = () => {
           </View>
         </ScrollView>
         <TouchableOpacity
-          className="absolute bottom-5 flex-row items-center justify-center bg-blue-500 p-3 w-4/5 rounded-lg"
-          onPress={() => router.back()}
-        >
-          <Text className="text-black text-base font-semibold">Go Back</Text>
+                  className="absolute flex-row items-center justify-center bg-[#ff0000] p-3 w-4/5 rounded-lg bottom-0"
+                  onPress={() => router.back()}
+                >
+                  <Text className="text-white text-base font-semibold">Go Back</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaProvider>
+    </SafeAreaView>
   );
 };
 

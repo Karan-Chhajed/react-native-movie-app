@@ -18,7 +18,7 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 const MovieDetails: FC<Movie> = () => {
 
@@ -77,10 +77,10 @@ const MovieDetails: FC<Movie> = () => {
   const genresFlatData = movieData.genres.map((genre: Genres) => (genre.name)).join(", ")
 
   return (
-    <SafeAreaProvider>
-      <View className="flex-1 items-center justify-center ">
+    <SafeAreaView className=" flex-1 bg-black">
+      <View className="items-center justify-center -mt-16 bg-black -bottom-4">
         <ScrollView
-          className="w-full mb-[4.5rem] -mt-10"
+          className="w-full mb-[4.5rem]"
           contentOffset={{ x: 0, y: 100 }}
           showsVerticalScrollIndicator={false}
         >
@@ -100,7 +100,7 @@ const MovieDetails: FC<Movie> = () => {
 
             <View className="mt-2 flex-col items-center justify-between w-full">
               <View className="flex-row items-center justify-between w-full">
-                <Text className="text-lg font-bold">{movieData.title}</Text>
+                <Text className="text-lg font-bold text-white">{movieData.title}</Text>
 
                 {isLoadingSavedExists ? (
                   <>
@@ -108,7 +108,7 @@ const MovieDetails: FC<Movie> = () => {
                   </>
                 ) :
                   <TouchableOpacity
-                    className={`rounded-lg border border-gray-400 ${isSavedData ? "bg-green-500" : ""}`}
+                    className={`rounded-lg border border-gray-400 px-2 ${isSavedData ? "bg-white" : ""}`}
                     onPress={() => {
                       if (isSavedData ) {
                         removeFromWatchlist(id as string);
@@ -127,7 +127,7 @@ const MovieDetails: FC<Movie> = () => {
                       }
                     }}
                   >
-                    <Text className="text-sm font-light">Watchlist</Text>
+                    <Text className={`text-sm font-light ${isSavedData ? 'text-black' : 'text-white'}`}>Watchlist</Text>
                   </TouchableOpacity>
                 }
               </View>
@@ -142,7 +142,7 @@ const MovieDetails: FC<Movie> = () => {
                     source={require("../../assets/images/star.png")}
                     className="size-4"
                   />
-                  <Text className="text-sm">
+                  <Text className="text-sm text-white">
                     {movieData.vote_average
                       ? Math.round(movieData.vote_average / 2)
                       : "N/A"}{" "}
@@ -152,7 +152,7 @@ const MovieDetails: FC<Movie> = () => {
               </View>
             </View>
             <View className="mt-4">
-              <Text className="text-base font-semibold">Overview</Text>
+              <Text className="text-base font-semibold text-white">Overview</Text>
               <Text className="text-sm text-gray-600 mt-2">
                 {movieData.overview}
               </Text>
@@ -163,15 +163,15 @@ const MovieDetails: FC<Movie> = () => {
             </View>
           </View>
         </ScrollView>
-
+          
         <TouchableOpacity
-          className="absolute bottom-5 flex-row items-center justify-center bg-blue-500 p-3 w-4/5 rounded-lg"
+          className="absolute flex-row items-center justify-center bg-[#ff0000] p-3 w-4/5 rounded-lg bottom-0"
           onPress={() => router.back()}
         >
-          <Text className="text-black text-base font-semibold">Go Back</Text>
+          <Text className="text-white text-base font-semibold">Go Back</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaProvider>
+    </SafeAreaView>
   );
 };
 

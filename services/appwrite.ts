@@ -31,7 +31,7 @@ export const checkSearchData = async (
         searchTerm: query,
         id: media.id,
         title:
-          media_type === "Movie"
+          media_type === "movie"
             ? (media as Movie).title
             : (media as TvSeries).name,
         posterUrl: `https://image.tmdb.org/t/p/w500${media.poster_path}`,

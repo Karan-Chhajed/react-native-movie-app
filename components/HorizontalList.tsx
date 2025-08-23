@@ -15,7 +15,7 @@ const HorizontalList:FC<HorizontalListProps> = ({mediaData, listTitle, type}) =>
 
     return (
         <View className="my-2">
-            <Text className='px-2 font-semibold text-lg'>{listTitle}</Text>
+            <Text className='px-2 font-semibold text-lg text-white'>{listTitle}</Text>
             <FlatList data={mediaData}
                       horizontal
                       keyExtractor={(movie) => movie.id.toString()}

@@ -23,7 +23,7 @@ export interface Genres {
     }
 
 export interface MediaType {
-  mediaType: 'Movie' | 'TV'
+  mediaType: 'movie' | 'tv'
 }
 
 export interface SearchedMedia {
@@ -32,7 +32,7 @@ export interface SearchedMedia {
     title: string; 
     posterUrl: string;
     overview: string;
-    media_type: MediaType;
+    media_type: string;
     vote_average:number;
 }
 
