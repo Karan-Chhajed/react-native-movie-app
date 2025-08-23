@@ -1,6 +1,7 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { fetchMovieDetails, fetchMovies, fetchTrendingMovies } from "@/services/api";
 import { getSearchedMovies } from "@/services/appwrite";
+import { Movie } from "@/interfaces";
 
 export const usePopularMovies = (query: string = '') => {
   return useQuery({
@@ -28,7 +29,7 @@ export const useMovies = (query: string) => {
   });
 };
 
-export const useMovieDetails = (movie_id: string, options?: Partial<UseQueryOptions<any>>) => {
+export const useMovieDetails = (movie_id: string, options?: Partial<UseQueryOptions<Movie>>) => {
   return useQuery({
     queryKey: ['movieDetails', movie_id],
     queryFn: () => fetchMovieDetails(movie_id),

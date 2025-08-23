@@ -29,7 +29,7 @@ export const SearchHistory:FC = () => {
           data={prevSearchedData}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <HorizontalMediaCardWithLink name={item.title} poster_path={item.posterUrl} id={item.id} overview={item.overview} type={item.media_type} vote_average={item.vote_average} />
+            <HorizontalMediaCardWithLink name={item.title} poster_path={item.posterUrl} id={item.id} overview={item.overview} type={item.media_type} />
           )}
         />
     )

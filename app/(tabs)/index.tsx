@@ -16,9 +16,9 @@ export default function Index() {
   const { data: trendingTvData, isLoading: isLoadingTvData, isError: isTrendingTvError, error: trendingTvError } = useTrendingTvSeries('day')
 
   return (
-    <View className="flex-1 items-center justify-start bg-white pt-20 px-4">
+    <View className="flex-1 items-center justify-start px-4 bg-black">
       <Image
-        source={require("../../assets/images/movie-picker.png")}
+        source={require("../../assets/images/cinema.png")}
         className="w-20 h-20 mb-6"
         resizeMode="contain"
       />
@@ -27,7 +27,7 @@ export default function Index() {
       {(isTrendingMovieDataError) && <Text className="text-red-500">{trendingMovieDataError?.message}</Text>}
       {(isTVError) && <Text className="text-red-500">{tvErrorData?.message}</Text>}
       {(isTrendingTvError) && <Text className="text-red-500">{trendingTvError?.message}</Text>}
-      {(isPopularMoviesLoading || isLoadingTv || isTrendingMovieDataLoading || isLoadingTvData) ? <ActivityIndicator size="large" color="#3b82f6" /> :
+      {(isPopularMoviesLoading || isLoadingTv || isTrendingMovieDataLoading || isLoadingTvData) ? <ActivityIndicator size="large" color="#FFFFFF" /> :
         <ScrollView>
           <HorizontalList mediaData={movieData} listTitle="Popular Movies" type="MOVIE" />
           <HorizontalList mediaData={trendingMoviesData} listTitle="Trending Movies" type="MOVIE" />

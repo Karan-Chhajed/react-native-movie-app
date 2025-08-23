@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { TouchableOpacity, Image, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 
 interface VerticalMediaCardProps {
     title: string;
@@ -18,9 +18,9 @@ const VerticalMediaCard:FC<VerticalMediaCardProps> = ({title, release_date, post
                 className="w-full h-40 rounded-lg mb-2"
                 resizeMode="cover"
             />
-            <Text className="text-sm font-semibold text-blue-500" numberOfLines={1}>{title}</Text>
+            <Text className="text-sm font-semibold text-white" numberOfLines={1}>{title}</Text>
             <View className="flex-row items-center justify-start gap-x-1">
-                <Text className="text-sm">{vote_average ? Math.round(vote_average / 2) : 'N/A'}</Text>
+                <Text className="text-sm text-white">{vote_average ? Math.round(vote_average / 2) : 'N/A'}</Text>
                 <Image source={require('../assets/images/star.png')} className="size-4"/>
             </View>
             <View className="flex-row flex items-center justify-between mt-1">

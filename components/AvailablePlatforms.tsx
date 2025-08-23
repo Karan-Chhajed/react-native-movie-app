@@ -10,7 +10,7 @@ interface AvailablePlatformsProps {
 export const AvailablePlatforms:FC<AvailablePlatformsProps> = ({title, platformData}) => {
     return(
         <View className="flex flex-row my-2 items-center justify-start w-full gap-x-3">
-                        <Text className="text-sm font-medium">{title}</Text>
+                        <Text className="text-sm font-medium text-white">{title}</Text>
                         {
                             platformData.map((item: { provider_name: string, logo_path: string }, index: number) => (
                                 <View key={index} >
