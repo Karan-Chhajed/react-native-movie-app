@@ -1,8 +1,14 @@
+import InfoModal from "@/components/InfoModal";
 import { Stack, Tabs } from "expo-router";
-import { Image } from "react-native";
+import { useState } from "react";
+import { Image, Pressable, Text } from "react-native";
 
 export default function _Layout() {
+
+    const [showInfo, setShowInfo] = useState(false)
+
     return (
+        <>
         <Tabs screenOptions={{
             tabBarStyle: {
                 backgroundColor: 'transparent',
@@ -54,5 +60,14 @@ export default function _Layout() {
                     )
                 }} />
         </Tabs>
+        <Pressable
+          className="absolute top-16 right-3 z-10 h-6 w-6 mt-1 border border-white rounded-full items-center justify-center"
+          onPress={() => setShowInfo(true)}
+        >
+          <Text className="text-white text-xs font-bold">i</Text>
+          
+        </Pressable>
+        <InfoModal visible={showInfo} onClose={() => setShowInfo(false)}/>
+        </>
     )
 }
