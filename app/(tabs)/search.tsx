@@ -39,7 +39,7 @@ const Search = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#000000" }} edges={['bottom']}>
-      <View className=''>
+      <View>
         <View className='w-full flex-row justify-center items-center gap-x-4'>
           <Image className="w-12 h-12" source={require('../../assets/images/search.png')} tintColor={'red'}/>
           <Text className='text-red-600 text-2xl'>Find what to watch!</Text>

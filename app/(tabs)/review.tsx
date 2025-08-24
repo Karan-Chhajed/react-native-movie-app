@@ -1,8 +1,9 @@
-import { KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity, View } from "react-native";
-import React from "react";
+import { Button, KeyboardAvoidingView, Platform, Pressable, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useReviewStore } from "@/store/store";
 import { useSubmitForData } from "@/hooks/useMutations";
+import InfoModal from "@/components/InfoModal";
 
 const Review = () => {
   const {
@@ -24,9 +25,11 @@ const Review = () => {
   const { mutate: submitReview } = useSubmitForData();
 
   return (
-    <KeyboardAwareScrollView className="bg-black" enableOnAndroid keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} enableAutomaticScroll={(Platform.OS === 'ios')} style={{flexGrow: 1}} extraScrollHeight={30}>
+    <KeyboardAwareScrollView className="bg-black" enableOnAndroid={true} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} enableAutomaticScroll={(Platform.OS === 'ios')} style={{flexGrow: 1}} extraScrollHeight={30}>
+      
       <View className="flex-1 items-center ">
-        <Text className="text-4xl font-semibold text-[#ff0000]">Review !</Text>
+        <Text className="text-4xl font-semibold text-[#ff0000] mt-1">Review !</Text>
+       
         <View className="w-full flex mt-6 gap-y-6 items-center">
           <TextInput
             placeholder="Name"
