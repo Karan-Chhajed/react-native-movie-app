@@ -94,3 +94,12 @@ export interface WatchData {
     buy?:ProviderData[]
   }
 }
+
+export interface ReviewData {
+  name: string;
+  company: string;
+  designation: string;
+  email: string;
+  linkedin: string;
+  comments: string;
+}

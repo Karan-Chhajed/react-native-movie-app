@@ -1,6 +1,7 @@
-import { SavedMedia } from "@/interfaces";
-import { saveMediaToWatchlist, deleteSavedMedia } from "@/services/appwrite";
-import { InfiniteData, useMutation, useQueryClient } from "@tanstack/react-query";
+import { ReviewData, SavedMedia } from "@/interfaces";
+import { saveMediaToWatchlist, deleteSavedMedia, postReview } from "@/services/appwrite";
+import { useReviewStore } from "@/store/store";
+import { InfiniteData, QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ID } from "react-native-appwrite";
 import Toast from 'react-native-toast-message'
 
@@ -121,3 +122,27 @@ export const useAddToWatchlist = () => {
       },
     });
   };
+
+  export const useSubmitForData = () => {
+   
+    const {reset, validate} = useReviewStore();
+    return useMutation({
+      mutationFn: async (formData: ReviewData) => {
+        const isValid = validate()
+        if(!isValid) throw new Error('Check your form')
+        return postReview(formData)},
+      onError: () => {
+        Toast.show({
+          type: 'error',
+          text1: 'Something went wrong! Check the fields'
+        })
+      },
+      onSuccess: () => {
+        reset()
+        Toast.show({
+          type: 'success',
+          text1: 'Review successfully submitted!'
+        })
+      }
+    })
+  }

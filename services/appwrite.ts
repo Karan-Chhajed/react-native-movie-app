@@ -1,4 +1,4 @@
-import { Movie, SavedMedia, SearchedMedia, TvSeries } from "@/interfaces";
+import { Movie, ReviewData, SavedMedia, SearchedMedia, TvSeries } from "@/interfaces";
 import { Client, Databases, ID, Query } from "react-native-appwrite";
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
@@ -6,6 +6,8 @@ const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
 
 const SAVED_MEDIA_COLLECTION_ID =
   process.env.EXPO_PUBLIC_SAVED_MEDIA_COLLECTION_ID!;
+
+const REVIEW_MEDIA_COLLECTION_ID = process.env.EXPO_PUBLIC_REVIEW_COLLECTION_ID!;
 
 const client = new Client()
   .setEndpoint("https://nyc.cloud.appwrite.io/v1")
@@ -136,3 +138,22 @@ export const getSavedMedia = async ({
     };
   }
 };
+
+export const postReview = async(formData: ReviewData) => {
+  try {
+    const doc = await databases.createDocument(DATABASE_ID, REVIEW_MEDIA_COLLECTION_ID, ID.unique(), 
+    {
+      name: formData.name,
+      company: formData.company,
+      designation: formData.designation,
+      email: formData.email,
+      linkedin: formData.linkedin,
+      comments: formData.comments
+    }
+  )
+  return doc;
+  } catch(error) {
+    console.log(error)
+    throw new Error ('Oops! Something went wrong!')
+  }
+}
