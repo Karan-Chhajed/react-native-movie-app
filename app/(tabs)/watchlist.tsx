@@ -1,4 +1,4 @@
-import { FlatList, Text, View, Image, ActivityIndicator } from "react-native";
+import { FlatList, Text, View, ActivityIndicator } from "react-native";
 import React, { FC } from "react";
 import ExpandableCard from "@/components/ExpandableCard";
 import { useFetchSaved } from "@/hooks/useMedia";
@@ -12,7 +12,7 @@ const WatchList: FC = () => {
     isFetchingNextPage,
     isError,
     isLoadingError,
-    isLoading
+    isLoading,
   } = useFetchSaved();
 
   const flatSaveData = watchData?.pages.flatMap((page) => page.data) ?? [];
@@ -20,40 +20,49 @@ const WatchList: FC = () => {
   if (!flatSaveData || flatSaveData === null || flatSaveData.length === 0) {
     return (
       <SafeAreaView className="flex-1 items-center justify-center bg-black">
-      <View className="font-semibold text-green-500">
-        <Text className=" font-bold text-2xl text-white">How about you add some </Text>
-      </View>
+        <View className="font-semibold text-green-500">
+          <Text className=" font-bold text-2xl text-white">
+            How about you add some{" "}
+          </Text>
+        </View>
       </SafeAreaView>
     );
-
   }
 
-  if(isError || isLoadingError || isLoading || flatSaveData === undefined) {
-   
-      return <><Text>Aaahhaa</Text></>
-    }
-  
-   if(watchData) {
+  if (isError || isLoadingError || isLoading || flatSaveData === undefined) {
     return (
-     <SafeAreaView className="flex-1 px-4 bg-black">
+      <>
+        <Text>Aaahhaa</Text>
+      </>
+    );
+  }
+
+  if (watchData) {
+    return (
+      <SafeAreaView className="flex-1 px-4 bg-black">
         <FlatList
           data={flatSaveData}
           keyExtractor={(item) => item.id}
           stickyHeaderIndices={[0]}
-          ListHeaderComponent={ <View className=" pb-4">
-    <Text className="text-center text-xl font-semibold text-white">Your Watch List</Text>
-  </View>}
+          ListHeaderComponent={
+            <View className=" pb-4">
+              <Text className="text-center text-xl font-semibold text-white">
+                Your Watch List
+              </Text>
+            </View>
+          }
           renderItem={({ item }) => {
-            return ( 
-            <ExpandableCard
-              vote_average={item.vote_average}
-              name={item.title}
-              mediaType={item.media_type}
-              genres={item.genres}
-              posterUrl={item.posterUrl}
-              id={item.id}
-            />
-          )}}
+            return (
+              <ExpandableCard
+                vote_average={item.vote_average}
+                name={item.title}
+                mediaType={item.media_type}
+                genres={item.genres}
+                posterUrl={item.posterUrl}
+                id={item.id}
+              />
+            );
+          }}
           onEndReached={() => {
             if (hasNextPage && !isFetchingNextPage) {
               fetchNextPage();
@@ -66,7 +75,7 @@ const WatchList: FC = () => {
             ) : null
           }
         />
-     </SafeAreaView>
+      </SafeAreaView>
     );
   }
 };

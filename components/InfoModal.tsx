@@ -1,5 +1,12 @@
 import { FC } from "react";
-import { Modal, View, Text, ScrollView, Pressable, Linking } from "react-native";
+import {
+  Modal,
+  View,
+  Text,
+  ScrollView,
+  Pressable,
+  Linking,
+} from "react-native";
 
 interface InfoModalProps {
   visible: boolean;
@@ -19,8 +26,8 @@ const InfoModal: FC<InfoModalProps> = ({ visible, onClose }) => {
   ];
 
   const hitLink = (url: string) => {
-    Linking.openURL(url).catch((err) => console.log(err))
-  }
+    Linking.openURL(url).catch((err) => console.log(err));
+  };
 
   return (
     <Modal
@@ -32,11 +39,11 @@ const InfoModal: FC<InfoModalProps> = ({ visible, onClose }) => {
       <View className="flex-1 bg-black/70 justify-center items-center">
         <View className="bg-black w-11/12 max-h-[80%] rounded-2xl p-6 border border-white">
           <Pressable
-  className="absolute top-3 right-3 z-10 h-6 w-6 border bg-white border-white rounded-full items-center justify-center"
-  onPress={onClose}
->
-  <Text className="text-black text-sm font-bold">X</Text>
-</Pressable>
+            className="absolute top-3 right-3 z-10 h-6 w-6 border bg-white border-white rounded-full items-center justify-center"
+            onPress={onClose}
+          >
+            <Text className="text-black text-sm font-bold">X</Text>
+          </Pressable>
           <ScrollView showsVerticalScrollIndicator={false} className="py-6">
             <View className="mb-4">
               <Text className="text-white text-lg font-bold">
@@ -70,7 +77,19 @@ const InfoModal: FC<InfoModalProps> = ({ visible, onClose }) => {
                   <Text className="text-white font-normal">{detail.value}</Text>
                 </Text>
               ))}
-              <Text className="font-semibold text-white">LinkedIn: <Text className="text-blue-500" onPress={() => hitLink('https://www.linkedin.com/in/karan-chhajed-317853177/')}>Karan Chhajed</Text></Text>
+              <Text className="font-semibold text-white">
+                LinkedIn:{" "}
+                <Text
+                  className="text-blue-500"
+                  onPress={() =>
+                    hitLink(
+                      "https://www.linkedin.com/in/karan-chhajed-317853177/"
+                    )
+                  }
+                >
+                  Karan Chhajed
+                </Text>
+              </Text>
             </View>
 
             <View>
@@ -79,14 +98,21 @@ const InfoModal: FC<InfoModalProps> = ({ visible, onClose }) => {
                 This is Movie Pal, a project designed to help you keep up to
                 date with the latest movies and TV shows.
               </Text>
-              
+
               <Text className="text-gray-300">
                 Project link can be found{" "}
-             
-                    <Text className="text-blue-500" onPress={() => hitLink('https://github.com/Karan-Chhajed/react-native-movie-app')}>here</Text>
-                
+                <Text
+                  className="text-blue-500"
+                  onPress={() =>
+                    hitLink(
+                      "https://github.com/Karan-Chhajed/react-native-movie-app"
+                    )
+                  }
+                >
+                  here
+                </Text>
               </Text>
-              
+
               <Text className="text-gray-300">
                 Please leave a review, the project can always be improved.
               </Text>

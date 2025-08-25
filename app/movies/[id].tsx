@@ -18,10 +18,9 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const MovieDetails: FC<Movie> = () => {
-
   const { id } = useLocalSearchParams();
 
   const {
@@ -47,7 +46,6 @@ const MovieDetails: FC<Movie> = () => {
   const { mutate: addToWatchlist } = useAddToWatchlist();
 
   const { mutate: removeFromWatchlist } = useRemoveFromWatchlist();
-  
 
   if (isLoadingMovieData || isLoadingWatchData) {
     return (
@@ -57,12 +55,7 @@ const MovieDetails: FC<Movie> = () => {
     );
   }
 
-  if (
-    isErrorMovie ||
-    isErrorWatch ||
-    !watchData ||
-    !movieData
-  ) {
+  if (isErrorMovie || isErrorWatch || !watchData || !movieData) {
     const message =
       [isMovieErrorData?.message, isWatchErrorData?.message]
         .filter(Boolean)
@@ -74,7 +67,9 @@ const MovieDetails: FC<Movie> = () => {
     );
   }
 
-  const genresFlatData = movieData.genres.map((genre: Genres) => (genre.name)).join(", ")
+  const genresFlatData = movieData.genres
+    .map((genre: Genres) => genre.name)
+    .join(", ");
 
   return (
     <SafeAreaView className=" flex-1 bg-black">
@@ -100,19 +95,21 @@ const MovieDetails: FC<Movie> = () => {
 
             <View className="mt-2 flex-col items-center justify-between w-full">
               <View className="flex-row items-center justify-between w-full">
-                <Text className="text-lg font-bold text-white">{movieData.title}</Text>
+                <Text className="text-lg font-bold text-white">
+                  {movieData.title}
+                </Text>
 
                 {isLoadingSavedExists ? (
                   <>
                     <ActivityIndicator size="small" color="#3b82f6" />
                   </>
-                ) :
+                ) : (
                   <TouchableOpacity
                     className={`rounded-lg border border-gray-400 px-2 ${isSavedData ? "bg-white" : ""}`}
+                    disabled={isErrorSavedExists}
                     onPress={() => {
-                      if (isSavedData ) {
+                      if (isSavedData) {
                         removeFromWatchlist(id as string);
-                      
                       } else {
                         addToWatchlist({
                           id: movieData.id,
@@ -121,15 +118,18 @@ const MovieDetails: FC<Movie> = () => {
                           overview: movieData.overview,
                           media_type: "Movie",
                           vote_average: movieData.vote_average,
-                          genres: genresFlatData
+                          genres: genresFlatData,
                         });
-                       
                       }
                     }}
                   >
-                    <Text className={`text-sm font-light ${isSavedData ? 'text-black' : 'text-white'}`}>Watchlist</Text>
+                    <Text
+                      className={`text-sm font-light ${isSavedData ? "text-black" : "text-white"}`}
+                    >
+                      Watchlist
+                    </Text>
                   </TouchableOpacity>
-                }
+                )}
               </View>
               <View className="flex-row items-center justify-between w-full py-2">
                 <Text className="text-sm text-gray-400 ">
@@ -152,7 +152,9 @@ const MovieDetails: FC<Movie> = () => {
               </View>
             </View>
             <View className="mt-4">
-              <Text className="text-base font-semibold text-white">Overview</Text>
+              <Text className="text-base font-semibold text-white">
+                Overview
+              </Text>
               <Text className="text-sm text-gray-600 mt-2">
                 {movieData.overview}
               </Text>
@@ -163,9 +165,9 @@ const MovieDetails: FC<Movie> = () => {
             </View>
           </View>
         </ScrollView>
-          
+
         <TouchableOpacity
-          className="absolute flex-row items-center justify-center bg-[#ff0000] p-3 w-4/5 rounded-lg bottom-0"
+          className="absolute flex-row items-center justify-center bg-red-150 p-3 w-4/5 rounded-lg bottom-0"
           onPress={() => router.back()}
         >
           <Text className="text-white text-base font-semibold">Go Back</Text>
