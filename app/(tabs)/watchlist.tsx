@@ -1,6 +1,6 @@
 import { FlatList, Text, View, ActivityIndicator } from 'react-native';
 import React, { FC } from 'react';
-import ExpandableCard from '@/components/ExpandableCard';
+import ExpandableCard from '@/components/SavedMovieCard';
 import { useFetchSaved } from '@/hooks/useMedia';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
