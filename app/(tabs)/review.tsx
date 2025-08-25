@@ -1,13 +1,7 @@
-import {
-  Platform,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { useReviewStore } from "@/store/store";
-import { useSubmitForData } from "@/hooks/useMutations";
+import { Platform, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useReviewStore } from '@/store/store';
+import { useSubmitForData } from '@/hooks/useMutations';
 
 const Review = () => {
   const {
@@ -36,14 +30,12 @@ const Review = () => {
       enableOnAndroid={true}
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
-      enableAutomaticScroll={Platform.OS === "ios"}
+      enableAutomaticScroll={Platform.OS === 'ios'}
       style={{ flexGrow: 1 }}
       extraScrollHeight={30}
     >
       <View className="flex-1 items-center ">
-        <Text className="text-4xl font-semibold text-red-150 mt-1">
-          Review !
-        </Text>
+        <Text className="text-4xl font-semibold text-red-150 mt-1">Review !</Text>
 
         <View className="w-full flex mt-6 gap-y-6 items-center">
           <TextInput

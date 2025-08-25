@@ -1,7 +1,7 @@
-import { Link } from "expo-router";
-import React, { FC } from "react";
-import HorizontalMediaCard from "./HorizontalMediaCard";
-import { TouchableOpacity } from "react-native";
+import { Link } from 'expo-router';
+import React, { FC } from 'react';
+import HorizontalMediaCard from './HorizontalMediaCard';
+import { TouchableOpacity } from 'react-native';
 
 interface HorizontalMediaCardProps {
   name: string;
@@ -18,7 +18,7 @@ const HorizontalMediaCardWithLink: FC<HorizontalMediaCardProps> = ({
   poster_path,
   id,
 }) => {
-  if (type === "movie") {
+  if (type === 'movie') {
     return (
       <Link href={`/movies/${id}`} className="p-4 " asChild>
         <TouchableOpacity className="w-full">
@@ -31,7 +31,7 @@ const HorizontalMediaCardWithLink: FC<HorizontalMediaCardProps> = ({
         </TouchableOpacity>
       </Link>
     );
-  } else if (type === "tv") {
+  } else if (type === 'tv') {
     return (
       <Link href={`/tv/${id}`} asChild className="p-4">
         <TouchableOpacity className="w-full">

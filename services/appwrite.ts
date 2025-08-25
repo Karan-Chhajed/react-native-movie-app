@@ -1,23 +1,15 @@
-import {
-  Movie,
-  ReviewData,
-  SavedMedia,
-  SearchedMedia,
-  TvSeries,
-} from "@/interfaces";
-import { Client, Databases, ID, Query } from "react-native-appwrite";
+import { Movie, ReviewData, SavedMedia, SearchedMedia, TvSeries } from '@/interfaces';
+import { Client, Databases, ID, Query } from 'react-native-appwrite';
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
 
-const SAVED_MEDIA_COLLECTION_ID =
-  process.env.EXPO_PUBLIC_SAVED_MEDIA_COLLECTION_ID!;
+const SAVED_MEDIA_COLLECTION_ID = process.env.EXPO_PUBLIC_SAVED_MEDIA_COLLECTION_ID!;
 
-const REVIEW_MEDIA_COLLECTION_ID =
-  process.env.EXPO_PUBLIC_REVIEW_COLLECTION_ID!;
+const REVIEW_MEDIA_COLLECTION_ID = process.env.EXPO_PUBLIC_REVIEW_COLLECTION_ID!;
 
 const client = new Client()
-  .setEndpoint("https://nyc.cloud.appwrite.io/v1")
+  .setEndpoint('https://nyc.cloud.appwrite.io/v1')
   .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!);
 
 const databases = new Databases(client);
@@ -25,24 +17,21 @@ const databases = new Databases(client);
 export const checkSearchData = async (
   query: string,
   media: Movie | TvSeries,
-  media_type: string
+  media_type: string,
 ) => {
   try {
     const result = await databases.listDocuments(DATABASE_ID, COLLECTION_ID, [
-      Query.equal("searchTerm", query),
-      Query.equal("media_type", media_type),
-      Query.equal("id", media.id),
+      Query.equal('searchTerm', query),
+      Query.equal('media_type', media_type),
+      Query.equal('id', media.id),
     ]);
     if (result.documents.length > 0) {
-      return { status: "Entry already exists" };
+      return { status: 'Entry already exists' };
     } else {
       await databases.createDocument(DATABASE_ID, COLLECTION_ID, ID.unique(), {
         searchTerm: query,
         id: media.id,
-        title:
-          media_type === "movie"
-            ? (media as Movie).title
-            : (media as TvSeries).name,
+        title: media_type === 'movie' ? (media as Movie).title : (media as TvSeries).name,
         posterUrl: `https://image.tmdb.org/t/p/w500${media.poster_path}`,
         overview: media.overview,
         media_type: media_type,
@@ -50,18 +39,14 @@ export const checkSearchData = async (
       });
     }
   } catch (error) {
-    console.error("Error updating search count:", error);
-    throw new Error("Failed to update search count");
+    console.error('Error updating search count:', error);
+    throw new Error('Failed to update search count');
   }
 };
 
-export const getSearchedMovies = async (): Promise<
-  SearchedMedia[] | undefined
-> => {
+export const getSearchedMovies = async (): Promise<SearchedMedia[] | undefined> => {
   try {
-    const result = await databases.listDocuments(DATABASE_ID, COLLECTION_ID, [
-      Query.limit(5),
-    ]);
+    const result = await databases.listDocuments(DATABASE_ID, COLLECTION_ID, [Query.limit(5)]);
     return result.documents as unknown as SearchedMedia[];
   } catch (error) {
     console.log(error);
@@ -83,7 +68,7 @@ export const saveMediaToWatchlist = async (media: SavedMedia) => {
         vote_average: media.vote_average,
         genres: media.genres,
         posterUrl: media.posterUrl,
-      }
+      },
     );
     return doc;
   } catch (error) {
@@ -103,17 +88,15 @@ export const deleteSavedMedia = async (id: string) => {
 
 export const saveMediaExists = async (id: number): Promise<boolean> => {
   try {
-    const result = await databases.listDocuments(
-      DATABASE_ID,
-      SAVED_MEDIA_COLLECTION_ID,
-      [Query.equal("id", id)]
-    );
+    const result = await databases.listDocuments(DATABASE_ID, SAVED_MEDIA_COLLECTION_ID, [
+      Query.equal('id', id),
+    ]);
     if (result.documents.length > 0) {
       return true;
     }
     return false;
   } catch (error) {
-    console.error("Error checking saved media:", error);
+    console.error('Error checking saved media:', error);
     return false;
   }
 };
@@ -126,17 +109,16 @@ export const getSavedMedia = async ({
   limit?: number;
 }) => {
   try {
-    const result = await databases.listDocuments(
-      DATABASE_ID,
-      SAVED_MEDIA_COLLECTION_ID,
-      [Query.limit(limit), Query.offset((pageParam - 1) * limit)]
-    );
+    const result = await databases.listDocuments(DATABASE_ID, SAVED_MEDIA_COLLECTION_ID, [
+      Query.limit(limit),
+      Query.offset((pageParam - 1) * limit),
+    ]);
     return {
       data: result.documents as unknown as SavedMedia[],
       total: result.total,
     };
   } catch (error) {
-    console.error("Error fetching saved media:", error);
+    console.error('Error fetching saved media:', error);
     return {
       data: [],
       total: 0,
@@ -157,11 +139,11 @@ export const postReview = async (formData: ReviewData) => {
         email: formData.email,
         linkedin: formData.linkedin,
         comments: formData.comments,
-      }
+      },
     );
     return doc;
   } catch (error) {
     console.log(error);
-    throw new Error("Oops! Something went wrong!");
+    throw new Error('Oops! Something went wrong!');
   }
 };

@@ -1,7 +1,7 @@
-import { ActivityIndicator, FlatList, View, Text } from "react-native";
-import HorizontalMediaCardWithLink from "./HorizontalMediaCardWithLink";
-import { useSearchedData } from "@/hooks/useMovies";
-import { FC } from "react";
+import { ActivityIndicator, FlatList, View, Text } from 'react-native';
+import HorizontalMediaCardWithLink from './HorizontalMediaCardWithLink';
+import { useSearchedData } from '@/hooks/useMovies';
+import { FC } from 'react';
 
 export const SearchHistory: FC = () => {
   const {
@@ -12,7 +12,7 @@ export const SearchHistory: FC = () => {
   } = useSearchedData();
 
   if (isLoadingPrevData) {
-    return <ActivityIndicator size={"large"} color="#3b82f6" />;
+    return <ActivityIndicator size={'large'} color="#3b82f6" />;
   } else if (isErrorPrevData || prevDataError) {
     return (
       <View className="flex-1 w-full flex-col justify-center items-center">

@@ -1,8 +1,8 @@
-import { Text, View, Image, ActivityIndicator, ScrollView } from "react-native";
-import { usePopularMovies, usetrendingMovies } from "@/hooks/useMovies";
-import React from "react";
-import HorizontalList from "@/components/HorizontalList";
-import { useTrendingTvSeries, useTvSeries } from "@/hooks/useTv";
+import { Text, View, Image, ActivityIndicator, ScrollView } from 'react-native';
+import { usePopularMovies, useTrendingMovies } from '@/hooks/useMovies';
+import React from 'react';
+import HorizontalList from '@/components/HorizontalList';
+import { useTrendingTvSeries, useTvSeries } from '@/hooks/useTv';
 
 export default function Index() {
   const {
@@ -10,33 +10,33 @@ export default function Index() {
     isLoading: isPopularMoviesLoading,
     isError: isPopularMoviesError,
     error: popularMoviesDataError,
-  } = usePopularMovies("");
+  } = usePopularMovies('');
 
   const {
     data: trendingMoviesData,
     isLoading: isTrendingMovieDataLoading,
     isError: isTrendingMovieDataError,
     error: trendingMovieDataError,
-  } = usetrendingMovies("day");
+  } = useTrendingMovies('day');
 
   const {
     data: tvData,
     isLoading: isLoadingTv,
     isError: isTVError,
     error: tvErrorData,
-  } = useTvSeries("");
+  } = useTvSeries('');
 
   const {
     data: trendingTvData,
     isLoading: isLoadingTvData,
     isError: isTrendingTvError,
     error: trendingTvError,
-  } = useTrendingTvSeries("day");
+  } = useTrendingTvSeries('day');
 
   return (
     <View className="flex-1 items-center justify-start px-4 bg-black">
       <Image
-        source={require("../../assets/images/cinema.png")}
+        source={require('../../assets/images/cinema.png')}
         className="w-20 h-20 mb-6"
         resizeMode="contain"
       />
@@ -47,39 +47,16 @@ export default function Index() {
       {isTrendingMovieDataError && (
         <Text className="text-red-500">{trendingMovieDataError?.message}</Text>
       )}
-      {isTVError && (
-        <Text className="text-red-500">{tvErrorData?.message}</Text>
-      )}
-      {isTrendingTvError && (
-        <Text className="text-red-500">{trendingTvError?.message}</Text>
-      )}
-      {isPopularMoviesLoading ||
-      isLoadingTv ||
-      isTrendingMovieDataLoading ||
-      isLoadingTvData ? (
+      {isTVError && <Text className="text-red-500">{tvErrorData?.message}</Text>}
+      {isTrendingTvError && <Text className="text-red-500">{trendingTvError?.message}</Text>}
+      {isPopularMoviesLoading || isLoadingTv || isTrendingMovieDataLoading || isLoadingTvData ? (
         <ActivityIndicator size="large" color="#FFFFFF" />
       ) : (
         <ScrollView>
-          <HorizontalList
-            mediaData={movieData}
-            listTitle="Popular Movies"
-            type="MOVIE"
-          />
-          <HorizontalList
-            mediaData={trendingMoviesData}
-            listTitle="Trending Movies"
-            type="MOVIE"
-          />
-          <HorizontalList
-            mediaData={tvData}
-            listTitle="Popular TV Shows"
-            type="TV"
-          />
-          <HorizontalList
-            mediaData={trendingTvData}
-            listTitle="Trending TV Series"
-            type="TV"
-          />
+          <HorizontalList mediaData={movieData} listTitle="Popular Movies" type="MOVIE" />
+          <HorizontalList mediaData={trendingMoviesData} listTitle="Trending Movies" type="MOVIE" />
+          <HorizontalList mediaData={tvData} listTitle="Popular TV Shows" type="TV" />
+          <HorizontalList mediaData={trendingTvData} listTitle="Trending TV Series" type="TV" />
         </ScrollView>
       )}
     </View>

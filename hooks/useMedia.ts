@@ -1,10 +1,6 @@
-import { SavedMedia } from "@/interfaces";
-import { getSavedMedia, saveMediaExists } from "@/services/appwrite";
-import {
-  InfiniteData,
-  useInfiniteQuery,
-  useQuery,
-} from "@tanstack/react-query";
+import { SavedMedia } from '@/interfaces';
+import { getSavedMedia, saveMediaExists } from '@/services/appwrite';
+import { InfiniteData, useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 export const useFetchSaved = () => {
   const limit = 10;
@@ -12,10 +8,10 @@ export const useFetchSaved = () => {
     { data: SavedMedia[]; total: number }, // TQueryFnData
     Error,
     InfiniteData<{ data: SavedMedia[]; total: number }>,
-    ["savedMedia"],
+    ['savedMedia'],
     number
   >({
-    queryKey: ["savedMedia"],
+    queryKey: ['savedMedia'],
     queryFn: ({ pageParam = 1 }) => getSavedMedia({ pageParam, limit }),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
@@ -27,7 +23,7 @@ export const useFetchSaved = () => {
 
 export const useSavedMediaExists = (id: number) => {
   return useQuery({
-    queryKey: ["savedMediaExists", id],
+    queryKey: ['savedMediaExists', id],
     queryFn: () => saveMediaExists(Number(id)),
     enabled: !!id,
   });

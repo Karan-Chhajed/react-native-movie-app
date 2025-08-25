@@ -1,7 +1,7 @@
-import { Movie, TvSeries } from "@/interfaces";
-import { View, FlatList, Text } from "react-native";
-import { FC } from "react";
-import VerticalMediaCardWithLink from "./VerticalMediaCardWithLink";
+import { Movie, TvSeries } from '@/interfaces';
+import { View, FlatList, Text } from 'react-native';
+import { FC } from 'react';
+import VerticalMediaCardWithLink from './VerticalMediaCardWithLink';
 
 type MediaData = Movie | TvSeries;
 
@@ -11,11 +11,7 @@ interface HorizontalListProps {
   type: string;
 }
 
-const HorizontalList: FC<HorizontalListProps> = ({
-  mediaData,
-  listTitle,
-  type,
-}) => {
+const HorizontalList: FC<HorizontalListProps> = ({ mediaData, listTitle, type }) => {
   return (
     <View className="my-2">
       <Text className="px-2 font-semibold text-lg text-white">{listTitle}</Text>
@@ -26,12 +22,10 @@ const HorizontalList: FC<HorizontalListProps> = ({
         renderItem={({ item }) => (
           <VerticalMediaCardWithLink
             id={item.id}
-            title={"title" in item ? item.title : item.name}
+            title={'title' in item ? item.title : item.name}
             poster_path={item.poster_path}
             vote_average={item.vote_average}
-            release_date={
-              "release_date" in item ? item.release_date : item.first_air_date
-            }
+            release_date={'release_date' in item ? item.release_date : item.first_air_date}
             type={type}
           />
         )}

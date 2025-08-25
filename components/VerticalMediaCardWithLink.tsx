@@ -1,7 +1,7 @@
-import { Link } from "expo-router";
-import { FC } from "react";
-import VerticalMediaCard from "@/components/VerticalMediaCard";
-import { TouchableOpacity } from "react-native";
+import { Link } from 'expo-router';
+import { FC } from 'react';
+import VerticalMediaCard from '@/components/VerticalMediaCard';
+import { TouchableOpacity } from 'react-native';
 
 interface VerticalMediaCardProps {
   id: number | string;
@@ -25,7 +25,7 @@ const VerticalMediaCardWithLink: FC<VerticalMediaCardProps> = ({
   const mediaType = type.toLowerCase();
   // Expo router nuance, Link will only work if if the immediate child is a Pressable or Touchable ! So weird! Will not work if its a different child
   // even though the parent on nested element is Touchable or pressable!
-  if (mediaType === "movie") {
+  if (mediaType === 'movie') {
     return (
       <Link href={`/movies/${id}`} asChild className="py-4">
         <TouchableOpacity className="w-28 h-56 flex-1 my-6">
@@ -40,7 +40,7 @@ const VerticalMediaCardWithLink: FC<VerticalMediaCardProps> = ({
         </TouchableOpacity>
       </Link>
     );
-  } else if (mediaType === "tv") {
+  } else if (mediaType === 'tv') {
     return (
       <Link href={`/tv/${id}`} asChild className="py-4">
         <TouchableOpacity className="w-28 h-56 flex-1 my-6">

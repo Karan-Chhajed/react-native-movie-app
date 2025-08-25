@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { View, Text } from "react-native";
+import { FC } from 'react';
+import { View, Text } from 'react-native';
 
 interface GenreProps {
   genres: {

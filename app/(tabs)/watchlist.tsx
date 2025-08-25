@@ -1,8 +1,8 @@
-import { FlatList, Text, View, ActivityIndicator } from "react-native";
-import React, { FC } from "react";
-import ExpandableCard from "@/components/ExpandableCard";
-import { useFetchSaved } from "@/hooks/useMedia";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { FlatList, Text, View, ActivityIndicator } from 'react-native';
+import React, { FC } from 'react';
+import ExpandableCard from '@/components/SavedMovieCard';
+import { useFetchSaved } from '@/hooks/useMedia';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const WatchList: FC = () => {
   const {
@@ -21,19 +21,17 @@ const WatchList: FC = () => {
     return (
       <SafeAreaView className="flex-1 items-center justify-center bg-black">
         <View className="font-semibold text-green-500">
-          <Text className=" font-bold text-2xl text-white">
-            How about you add some{" "}
-          </Text>
+          <Text className=" font-bold text-2xl text-white">How about you add some </Text>
         </View>
       </SafeAreaView>
     );
   }
 
-  if (isError || isLoadingError || isLoading || flatSaveData === undefined) {
+  if (isError || isLoadingError || isLoading ) {
     return (
-      <>
-        <Text>Aaahhaa</Text>
-      </>
+      <View className='flex-1 justify-center items-center'>
+          <ActivityIndicator size='large' color={'white'}/>
+      </ View>
     );
   }
 
@@ -46,9 +44,7 @@ const WatchList: FC = () => {
           stickyHeaderIndices={[0]}
           ListHeaderComponent={
             <View className=" pb-4">
-              <Text className="text-center text-xl font-semibold text-white">
-                Your Watch List
-              </Text>
+              <Text className="text-center text-xl font-semibold text-white">Your Watch List</Text>
             </View>
           }
           renderItem={({ item }) => {
@@ -70,9 +66,7 @@ const WatchList: FC = () => {
           }}
           onEndReachedThreshold={0.5}
           ListFooterComponent={
-            isFetchingNextPage ? (
-              <ActivityIndicator size={"small"} color="#3b82f6" />
-            ) : null
+            isFetchingNextPage ? <ActivityIndicator size={'small'} color="#3b82f6" /> : null
           }
         />
       </SafeAreaView>

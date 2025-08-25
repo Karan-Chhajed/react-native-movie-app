@@ -1,13 +1,7 @@
-import { useRemoveFromWatchlist } from "@/hooks/useMutations";
-import { Link } from "expo-router";
-import React, { FC } from "react";
-import {
-  View,
-  Image,
-  Text,
-  ImageBackground,
-  TouchableOpacity,
-} from "react-native";
+import { useRemoveFromWatchlist } from '@/hooks/useMutations';
+import { Link } from 'expo-router';
+import React, { FC } from 'react';
+import { View, Image, Text, ImageBackground, TouchableOpacity } from 'react-native';
 
 interface SavedMovieCardProps {
   name: string;
@@ -26,12 +20,12 @@ const SavedMovieCard: FC<SavedMovieCardProps> = ({
   posterUrl,
   id,
 }) => {
-  const genreArray = genres.split(", ").map((genre) => genre.trim());
+  const genreArray = genres.split(', ').map((genre) => genre.trim());
 
   const { mutate: removeFromWatchlist } = useRemoveFromWatchlist();
 
   return (
-    <Link href={mediaType === "Movie" ? `/movies/${id}` : `/tv/${id}`} asChild>
+    <Link href={mediaType === 'Movie' ? `/movies/${id}` : `/tv/${id}`} asChild>
       <TouchableOpacity className="w-full">
         <ImageBackground
           source={{ uri: `https://image.tmdb.org/t/p/w500${posterUrl}` }}
@@ -41,24 +35,17 @@ const SavedMovieCard: FC<SavedMovieCardProps> = ({
           <View className="flex-1 justify-between">
             <View className="flex flex-row items-center justify-between">
               <Text className="font-semibold text-xl bg-slate-300 px-1 rounded-lg">
-                {name}{" "}
-                <Text className="font-light text-base">({mediaType})</Text>{" "}
+                {name} <Text className="font-light text-base">({mediaType})</Text>{' '}
               </Text>
               <View className="flex flex-row items-center justify-center gap-x-1 bg-slate-300 rounded-xl p-0.5">
                 <Text className="p-1">{Math.round(vote_average / 2)}</Text>
-                <Image
-                  source={require("../assets/images/star.png")}
-                  className="size-4"
-                />
+                <Image source={require('../assets/images/star.png')} className="size-4" />
               </View>
             </View>
             <View className="flex flex-row justify-between items-center">
               <View className="flex flex-row flex-wrap gap-2">
                 {genreArray.map((item, index) => (
-                  <Text
-                    key={index}
-                    className="text-sm bg-slate-300 py-1 px-2 rounded-xl"
-                  >
+                  <Text key={index} className="text-sm bg-slate-300 py-1 px-2 rounded-xl">
                     {item}
                   </Text>
                 ))}

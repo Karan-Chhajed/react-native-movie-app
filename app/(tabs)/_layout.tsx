@@ -1,7 +1,7 @@
-import InfoModal from "@/components/InfoModal";
-import { Tabs } from "expo-router";
-import { useState } from "react";
-import { Image, Pressable, Text } from "react-native";
+import InfoModal from '@/components/InfoModal';
+import { Tabs } from 'expo-router';
+import { useState } from 'react';
+import { Image, Pressable, Text } from 'react-native';
 
 export default function _Layout() {
   const [showInfo, setShowInfo] = useState(false);
@@ -12,23 +12,23 @@ export default function _Layout() {
       <Tabs
         screenOptions={{
           tabBarStyle: {
-            backgroundColor: "transparent",
+            backgroundColor: 'transparent',
             borderTopWidth: 0,
             height: 65,
             paddingBottom: 1,
           },
-          tabBarActiveTintColor: "white",
-          tabBarInactiveTintColor: "red",
+          tabBarActiveTintColor: 'white',
+          tabBarInactiveTintColor: 'red',
         }}
       >
         <Tabs.Screen
           name="index"
           options={{
             headerShown: false,
-            tabBarLabel: "Home",
+            tabBarLabel: 'Home',
             tabBarIcon: ({ focused, color }) => (
               <Image
-                source={require("../../assets/images/home.png")}
+                source={require('../../assets/images/home.png')}
                 className="w-8 h-8"
                 style={{ tintColor: color }}
               />
@@ -39,10 +39,10 @@ export default function _Layout() {
           name="search"
           options={{
             headerShown: false,
-            tabBarLabel: "Search",
+            tabBarLabel: 'Search',
             tabBarIcon: ({ focused, color }) => (
               <Image
-                source={require("../../assets/images/search.png")}
+                source={require('../../assets/images/search.png')}
                 className="w-8 h-8"
                 tintColor={color}
               />
@@ -54,10 +54,10 @@ export default function _Layout() {
           name="watchlist"
           options={{
             headerShown: false,
-            tabBarLabel: "Saved",
+            tabBarLabel: 'Saved',
             tabBarIcon: ({ focused, color }) => (
               <Image
-                source={require("../../assets/images/saved.png")}
+                source={require('../../assets/images/saved.png')}
                 className="w-8 h-8"
                 tintColor={color}
               />
@@ -69,10 +69,10 @@ export default function _Layout() {
           name="review"
           options={{
             headerShown: false,
-            tabBarLabel: "Review",
+            tabBarLabel: 'Review',
             tabBarIcon: ({ focused, color }) => (
               <Image
-                source={require("../../assets/images/profile.png")}
+                source={require('../../assets/images/profile.png')}
                 className="w-8 h-8"
                 tintColor={color}
               />

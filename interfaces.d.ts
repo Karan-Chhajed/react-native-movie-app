@@ -14,47 +14,45 @@ export interface Movie {
   vote_average: number;
   vote_count: number;
   runtime?: number;
-  genres: Genres[]
+  genres: Genres[];
 }
 
 export interface Genres {
-      id: number,
-      name: string
-    }
+  id: number;
+  name: string;
+}
 
 export interface MediaType {
-  mediaType: 'movie' | 'tv'
+  mediaType: 'movie' | 'tv';
 }
 
 export interface SearchedMedia {
-    searchtTerm: string;
-    id: string;
-    title: string; 
-    posterUrl: string;
-    overview: string;
-    media_type: string;
-    vote_average:number;
+  searchtTerm: string;
+  id: string;
+  title: string;
+  posterUrl: string;
+  overview: string;
+  media_type: string;
+  vote_average: number;
 }
 
-
-
 export interface SavedMedia {
-    $id?: string;
-    createdAt?: string;
-    id: string;
-    title: string; 
-    overview: string;
-    posterUrl: string;
-    media_type: string; // 'Movie' | 'TV'
-    vote_average:number;
-    genres: string
+  $id?: string;
+  createdAt?: string;
+  id: string;
+  title: string;
+  overview: string;
+  posterUrl: string;
+  media_type: string; // 'Movie' | 'TV'
+  vote_average: number;
+  genres: string;
 }
 
 export interface Network {
-  id: number,
-  logo_path: string,
-  name: string,
-  origin_country: string
+  id: number;
+  logo_path: string;
+  name: string;
+  origin_country: string;
 }
 
 export interface TvSeries {
@@ -64,26 +62,26 @@ export interface TvSeries {
   backdrop_path: string;
   first_air_date: string;
   last_air_date: string;
-  overview: string
-  poster_path: string
+  overview: string;
+  poster_path: string;
   vote_average: number;
   vote_count: number;
   genre_ids: number[];
   original_language: string;
   original_title: string;
   popularity: number;
-  networks: Network[]
+  networks: Network[];
   genres: {
-    id: number,
-    name: string
-  }[]
+    id: number;
+    name: string;
+  }[];
 }
 
 export interface ProviderData {
-  provider_name: string,
-  logo_path: string
   provider_name: string;
-  display_priority: number
+  logo_path: string;
+  provider_name: string;
+  display_priority: number;
 }
 
 export interface WatchData {
@@ -91,8 +89,8 @@ export interface WatchData {
     link: string;
     flatrate?: ProviderData[];
     rent?: ProviderData[];
-    buy?:ProviderData[]
-  }
+    buy?: ProviderData[];
+  };
 }
 
 export interface ReviewData {

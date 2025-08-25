@@ -1,15 +1,15 @@
-import { TvSeries, WatchData } from "@/interfaces";
+import { TvSeries, WatchData } from '@/interfaces';
 import {
   fetchTrendingTvData,
   fetchTvData,
   fetchTvDetails,
   fetchWatchProviders,
-} from "@/services/api";
-import { useQuery, UseQueryOptions } from "@tanstack/react-query";
+} from '@/services/api';
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
-export const useTvSeries = (query: string = "") => {
+export const useTvSeries = (query: string = '') => {
   return useQuery({
-    queryKey: ["PopularSeries"],
+    queryKey: ['PopularSeries'],
     queryFn: () => fetchTvData({ query }),
     retry: 2,
     staleTime: 60 * 60 * 1000,
@@ -19,7 +19,7 @@ export const useTvSeries = (query: string = "") => {
 
 export const useTrendingTvSeries = (query: string) => {
   return useQuery({
-    queryKey: ["TrendingTv", query],
+    queryKey: ['TrendingTv', query],
     queryFn: () => fetchTrendingTvData({ query }),
     retry: 2,
     staleTime: 60 * 60 * 1000,
@@ -29,7 +29,7 @@ export const useTrendingTvSeries = (query: string) => {
 
 export const useTv = (query: string) => {
   return useQuery({
-    queryKey: ["SearchedTv", query],
+    queryKey: ['SearchedTv', query],
     queryFn: () => fetchTvData({ query }),
     retry: 2,
     staleTime: 60 * 60 * 1000,
@@ -37,12 +37,9 @@ export const useTv = (query: string) => {
   });
 };
 
-export const useTvById = (
-  series_id: string,
-  options?: Partial<UseQueryOptions<any>>
-) => {
+export const useTvById = (series_id: string, options?: Partial<UseQueryOptions<any>>) => {
   return useQuery<TvSeries>({
-    queryKey: ["TvDetails", series_id],
+    queryKey: ['TvDetails', series_id],
     queryFn: () => fetchTvDetails(series_id),
     enabled: !!series_id,
     retry: 2,
@@ -54,11 +51,11 @@ export const useTvById = (
 
 export const useWatchProviders = (
   series_id: string,
-  platform: "tv" | "movie",
-  options?: Partial<UseQueryOptions<any>>
+  platform: 'tv' | 'movie',
+  options?: Partial<UseQueryOptions<any>>,
 ) => {
   return useQuery<WatchData>({
-    queryKey: ["WatchProviders", series_id],
+    queryKey: ['WatchProviders', series_id],
     queryFn: () => fetchWatchProviders(series_id, platform),
     enabled: !!series_id,
     retry: 2,
