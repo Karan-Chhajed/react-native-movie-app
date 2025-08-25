@@ -1,24 +1,14 @@
-import { GenreComponent } from "@/components/GenreComponent";
-import { WhereToWatch } from "@/components/WhereToWatch";
-import { useSavedMediaExists } from "@/hooks/useMedia";
-import { useMovieDetails } from "@/hooks/useMovies";
-import {
-  useAddToWatchlist,
-  useRemoveFromWatchlist,
-} from "@/hooks/useMutations";
-import { useWatchProviders } from "@/hooks/useTv";
-import { Movie, Genres } from "@/interfaces";
-import { router, useLocalSearchParams } from "expo-router";
-import React, { FC } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  ActivityIndicator,
-  Image,
-  TouchableOpacity,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { GenreComponent } from '@/components/GenreComponent';
+import { WhereToWatch } from '@/components/WhereToWatch';
+import { useSavedMediaExists } from '@/hooks/useMedia';
+import { useMovieDetails } from '@/hooks/useMovies';
+import { useAddToWatchlist, useRemoveFromWatchlist } from '@/hooks/useMutations';
+import { useWatchProviders } from '@/hooks/useTv';
+import { Movie, Genres } from '@/interfaces';
+import { router, useLocalSearchParams } from 'expo-router';
+import React, { FC } from 'react';
+import { View, Text, ScrollView, ActivityIndicator, Image, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const MovieDetails: FC<Movie> = () => {
   const { id } = useLocalSearchParams();
@@ -35,7 +25,7 @@ const MovieDetails: FC<Movie> = () => {
     isLoading: isLoadingWatchData,
     isError: isErrorWatch,
     error: isWatchErrorData,
-  } = useWatchProviders(id as string, "movie");
+  } = useWatchProviders(id as string, 'movie');
 
   const {
     data: isSavedData,
@@ -57,9 +47,8 @@ const MovieDetails: FC<Movie> = () => {
 
   if (isErrorMovie || isErrorWatch || !watchData || !movieData) {
     const message =
-      [isMovieErrorData?.message, isWatchErrorData?.message]
-        .filter(Boolean)
-        .join(" | ") || "Something went wrong!";
+      [isMovieErrorData?.message, isWatchErrorData?.message].filter(Boolean).join(' | ') ||
+      'Something went wrong!';
     return (
       <View className="flex-1 items-center justify-center">
         <Text className="text-red-500">{message}</Text>
@@ -67,9 +56,7 @@ const MovieDetails: FC<Movie> = () => {
     );
   }
 
-  const genresFlatData = movieData.genres
-    .map((genre: Genres) => genre.name)
-    .join(", ");
+  const genresFlatData = movieData.genres.map((genre: Genres) => genre.name).join(', ');
 
   return (
     <SafeAreaView className=" flex-1 bg-black">
@@ -85,7 +72,7 @@ const MovieDetails: FC<Movie> = () => {
                 source={{
                   uri: movieData.poster_path
                     ? `https://image.tmdb.org/t/p/w500${movieData.poster_path}`
-                    : "https://via.placeholder.com/150",
+                    : 'https://via.placeholder.com/150',
                 }}
                 className="w-full rounded-lg mb-2"
                 resizeMode="cover"
@@ -95,9 +82,7 @@ const MovieDetails: FC<Movie> = () => {
 
             <View className="mt-2 flex-col items-center justify-between w-full">
               <View className="flex-row items-center justify-between w-full">
-                <Text className="text-lg font-bold text-white">
-                  {movieData.title}
-                </Text>
+                <Text className="text-lg font-bold text-white">{movieData.title}</Text>
 
                 {isLoadingSavedExists ? (
                   <>
@@ -105,7 +90,7 @@ const MovieDetails: FC<Movie> = () => {
                   </>
                 ) : (
                   <TouchableOpacity
-                    className={`rounded-lg border border-gray-400 px-2 ${isSavedData ? "bg-white" : ""}`}
+                    className={`rounded-lg border border-gray-400 px-2 ${isSavedData ? 'bg-white' : ''}`}
                     disabled={isErrorSavedExists}
                     onPress={() => {
                       if (isSavedData) {
@@ -116,7 +101,7 @@ const MovieDetails: FC<Movie> = () => {
                           title: movieData.title,
                           posterUrl: `https://image.tmdb.org/t/p/w500${movieData.poster_path}`,
                           overview: movieData.overview,
-                          media_type: "Movie",
+                          media_type: 'Movie',
                           vote_average: movieData.vote_average,
                           genres: genresFlatData,
                         });
@@ -124,7 +109,7 @@ const MovieDetails: FC<Movie> = () => {
                     }}
                   >
                     <Text
-                      className={`text-sm font-light ${isSavedData ? "text-black" : "text-white"}`}
+                      className={`text-sm font-light ${isSavedData ? 'text-black' : 'text-white'}`}
                     >
                       Watchlist
                     </Text>
@@ -132,32 +117,20 @@ const MovieDetails: FC<Movie> = () => {
                 )}
               </View>
               <View className="flex-row items-center justify-between w-full py-2">
-                <Text className="text-sm text-gray-400 ">
-                  Runtime: {movieData.runtime} mins
-                </Text>
+                <Text className="text-sm text-gray-400 ">Runtime: {movieData.runtime} mins</Text>
                 {/* <Text className="text-sm text-gray-400">{movieDetailsData.release_date.split('-')[0] ?? 'N/A'}</Text> */}
 
                 <View className="flex-row items-center justify-center gap-x-1">
-                  <Image
-                    source={require("../../assets/images/star.png")}
-                    className="size-4"
-                  />
+                  <Image source={require('../../assets/images/star.png')} className="size-4" />
                   <Text className="text-sm text-white">
-                    {movieData.vote_average
-                      ? Math.round(movieData.vote_average / 2)
-                      : "N/A"}{" "}
-                    / 5
+                    {movieData.vote_average ? Math.round(movieData.vote_average / 2) : 'N/A'} / 5
                   </Text>
                 </View>
               </View>
             </View>
             <View className="mt-4">
-              <Text className="text-base font-semibold text-white">
-                Overview
-              </Text>
-              <Text className="text-sm text-gray-600 mt-2">
-                {movieData.overview}
-              </Text>
+              <Text className="text-base font-semibold text-white">Overview</Text>
+              <Text className="text-sm text-gray-600 mt-2">{movieData.overview}</Text>
             </View>
             <WhereToWatch watchData={watchData} />
             <View className="w-full my-2">

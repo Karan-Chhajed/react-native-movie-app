@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { View, Image, Text } from "react-native";
+import { FC } from 'react';
+import { View, Image, Text } from 'react-native';
 
 interface HorizontalMediaCardProps {
   name: string;
@@ -19,7 +19,7 @@ const HorizontalMediaCard: FC<HorizontalMediaCardProps> = ({
       <View className="flex flex-row items-start gap-6">
         <View className="flex flex-col gap-y-2">
           <Image
-            source={{ uri: poster_path ?? "https://via.placeholder.com/150" }}
+            source={{ uri: poster_path ?? 'https://via.placeholder.com/150' }}
             className="w-24 h-40 rounded-lg"
           />
         </View>
@@ -33,9 +33,7 @@ const HorizontalMediaCard: FC<HorizontalMediaCardProps> = ({
       </View>
       <View className="flex flex-row justify-between items-center my-2">
         <Text>{type}</Text>
-        <Text className="text-sm font-light text-white">
-          Tap to know more...
-        </Text>
+        <Text className="text-sm font-light text-white">Tap to know more...</Text>
       </View>
     </>
   );
