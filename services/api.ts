@@ -43,7 +43,7 @@ export const fetchTrendingMovies = async ({ time_window }: { time_window: string
     const data = await response.json();
     return data.results;
   } catch (error) {
-    throw new Error('Failed to fetch the details');
+    throw new Error('Failed to fetch the details' + error);
   }
 };
 

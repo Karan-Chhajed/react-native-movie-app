@@ -1,5 +1,5 @@
 import { Text, View, Image, ActivityIndicator, ScrollView } from 'react-native';
-import { usePopularMovies, usetrendingMovies } from '@/hooks/useMovies';
+import { usePopularMovies, useTrendingMovies } from '@/hooks/useMovies';
 import React from 'react';
 import HorizontalList from '@/components/HorizontalList';
 import { useTrendingTvSeries, useTvSeries } from '@/hooks/useTv';
@@ -17,7 +17,7 @@ export default function Index() {
     isLoading: isTrendingMovieDataLoading,
     isError: isTrendingMovieDataError,
     error: trendingMovieDataError,
-  } = usetrendingMovies('day');
+  } = useTrendingMovies('day');
 
   const {
     data: tvData,

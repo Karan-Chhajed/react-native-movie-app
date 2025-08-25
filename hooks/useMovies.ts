@@ -11,7 +11,7 @@ export const usePopularMovies = (query: string = '') => {
   });
 };
 
-export const usetrendingMovies = (time_window: string) => {
+export const useTrendingMovies = (time_window: string) => {
   return useQuery({
     queryKey: ['trendingMovies', time_window],
     queryFn: () => fetchTrendingMovies({ time_window }),
