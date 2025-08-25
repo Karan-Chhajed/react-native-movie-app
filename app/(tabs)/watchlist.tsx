@@ -27,11 +27,11 @@ const WatchList: FC = () => {
     );
   }
 
-  if (isError || isLoadingError || isLoading || flatSaveData === undefined) {
+  if (isError || isLoadingError || isLoading ) {
     return (
-      <>
-        <Text>Aaahhaa</Text>
-      </>
+      <View className='flex-1 justify-center items-center'>
+          <ActivityIndicator size='large' color={'white'}/>
+      </ View>
     );
   }
 
