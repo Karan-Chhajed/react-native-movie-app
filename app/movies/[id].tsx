@@ -4,10 +4,10 @@ import { useSavedMediaExists } from '@/hooks/useMedia';
 import { useMovieDetails } from '@/hooks/useMovies';
 import { useAddToWatchlist, useRemoveFromWatchlist } from '@/hooks/useMutations';
 import { useWatchProviders } from '@/hooks/useTv';
-import { Movie, Genres } from '@/interfaces';
+import { Genres, Movie } from '@/interfaces';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { FC } from 'react';
-import { View, Text, ScrollView, ActivityIndicator, Image, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const MovieDetails: FC<Movie> = () => {
@@ -82,15 +82,14 @@ const MovieDetails: FC<Movie> = () => {
 
             <View className="mt-2 flex-col items-center justify-between w-full">
               <View className="flex-row items-center justify-between w-full">
-                <Text className="text-lg font-bold text-white">{movieData.title}</Text>
-
+                <Text className="text-lg font-bold text-white flex-[2]">{movieData.title}</Text>
                 {isLoadingSavedExists ? (
                   <>
                     <ActivityIndicator size="small" color="#3b82f6" />
                   </>
                 ) : (
                   <TouchableOpacity
-                    className={`rounded-lg border border-gray-400 px-2 ${isSavedData ? 'bg-white' : ''}`}
+                    className={`rounded-lg border flex-[1/2] mt-0 border-gray-400 px-2 ${isSavedData ? 'bg-white' : ''}`}
                     disabled={isErrorSavedExists}
                     onPress={() => {
                       if (isSavedData) {
