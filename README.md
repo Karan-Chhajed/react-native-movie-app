@@ -8,12 +8,13 @@ Built with clean architecture and modern React Native best practices.
 ## 🚀 Live Demo
 👉 [View on Expo](
     🤖 Open this link on your Android devices (or scan the QR code) to install the app:
-    https://expo.dev/accounts/deusmaximus/projects/movie-pal/builds/34bb73e9-4d0b-460d-8576-cc473a9904e7
+    https://expo.dev/accounts/deusmaximus/projects/movie-pal/builds/33c0b058-d5a0-48a7-b8b5-dbb60184d4ad
 )  
 (Scan the QR code with the **Expo Go** app to preview on your device.)
 
 
-<img width="307" height="350" alt="androidQR" src="https://github.com/user-attachments/assets/3881e4a4-2db5-4729-81ae-9e94d991524b" />
+
+<img width="308" height="351" alt="myAPP" src="https://github.com/user-attachments/assets/279a5d02-7f67-41b0-b61c-79dec97e1bc7" />
 
 
 
