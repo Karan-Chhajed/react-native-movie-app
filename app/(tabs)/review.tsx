@@ -41,7 +41,7 @@ const Review = () => {
       style={{ flex: 1 }}
       extraScrollHeight={30}
     >
-      <View className="flex-1 items-center">
+      <View className="flex-1 items-center px-6">
         
 
         <View className="w-full flex mt-6 gap-y-6 items-center">
@@ -50,30 +50,35 @@ const Review = () => {
             className="w-full border rounded-xl border-gray-400 h-14 p-4 text-white"
             value={name}
             onChangeText={setName}
+            placeholderTextColor={'gray'}
           />
           <TextInput
             placeholder="Company"
             className="w-full border rounded-xl border-gray-400 h-14 p-4 text-white"
             value={company}
             onChangeText={setCompany}
+            placeholderTextColor={'gray'}
           />
           <TextInput
             placeholder="Designation"
             className="w-full border rounded-xl border-gray-400 h-14 p-4 text-white"
             value={designation}
             onChangeText={setDesignation}
+            placeholderTextColor={'gray'}
           />
           <TextInput
             placeholder="E-mail"
             className="w-full border rounded-xl border-gray-400 h-14 p-4 text-white"
             value={email}
             onChangeText={setEmail}
+            placeholderTextColor={'gray'}
           />
           <TextInput
             placeholder="LinkedIn Url"
             className="w-full border rounded-xl border-gray-400 h-14 p-4 text-white"
             value={linkedin}
             onChangeText={setLinkedin}
+            placeholderTextColor={'gray'}
           />
 
           <Richtext />

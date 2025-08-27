@@ -1,16 +1,22 @@
 import { Movie, ReviewData, SavedMedia, SearchedMedia, TvSeries } from '@/interfaces';
 import { Client, Databases, ID, Query } from 'react-native-appwrite';
+import config from "../app.json";
 
-const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
-const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
+const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID! ?? config.expo.extra.appwrite.dbId;
+const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID! ?? config.expo.extra.appwrite.collectionId;
 
-const SAVED_MEDIA_COLLECTION_ID = process.env.EXPO_PUBLIC_SAVED_MEDIA_COLLECTION_ID!;
+const SAVED_MEDIA_COLLECTION_ID = process.env.EXPO_PUBLIC_SAVED_MEDIA_COLLECTION_ID! ?? config.expo.extra.appwrite.savedCollectionId;
 
-const REVIEW_MEDIA_COLLECTION_ID = process.env.EXPO_PUBLIC_REVIEW_COLLECTION_ID!;
+const REVIEW_MEDIA_COLLECTION_ID = process.env.EXPO_PUBLIC_REVIEW_COLLECTION_ID! ?? config.expo.extra.appwrite.reviewCollectionId;
+
+const PROJECT_ID = process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID! ?? config.expo.extra.appwrite.projectId
+
+// It physically hurts me doing it this way. Rest assured I know better than to pass sensitive keys like this. I working on a lightweight backend,
+// so I can get rid of this atrocity!!!
 
 const client = new Client()
   .setEndpoint('https://nyc.cloud.appwrite.io/v1')
-  .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!);
+  .setProject(PROJECT_ID);
 
 const databases = new Databases(client);
 

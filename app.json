@@ -48,6 +48,14 @@
       "router": {},
       "eas": {
         "projectId": "f7059067-15ae-4bb9-9793-bc89743cc961"
+      },
+      "appwrite": {
+        "projectId": "688de0e5001ac443dfa4",
+        "endpoint": "https://nyc.cloud.appwrite.io/v1",
+        "dbId": "688de1310033ea37f862",
+        "collectionId": "688de148000a46e81ca0",
+        "savedCollectionId": "68924c5d001fcbe93a28",
+        "reviewCollectionId": "68a98a6a00276c1794f7"
       }
     },
     "runtimeVersion": {
