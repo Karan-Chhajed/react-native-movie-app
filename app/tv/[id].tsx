@@ -6,7 +6,7 @@ import { useTvById, useWatchProviders } from '@/hooks/useTv';
 import { TvSeries } from '@/interfaces';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { FC } from 'react';
-import { View, Text, ScrollView, ActivityIndicator, Image, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const TvDetails: FC<TvSeries> = () => {
