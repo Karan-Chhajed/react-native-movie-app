@@ -1,7 +1,7 @@
-import { FlatList, Text, View, ActivityIndicator } from 'react-native';
-import React, { FC } from 'react';
 import ExpandableCard from '@/components/SavedMovieCard';
 import { useFetchSaved } from '@/hooks/useMedia';
+import React, { FC } from 'react';
+import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const WatchList: FC = () => {
@@ -17,7 +17,7 @@ const WatchList: FC = () => {
 
   const flatSaveData = watchData?.pages.flatMap((page) => page.data) ?? [];
 
-  if (!flatSaveData || flatSaveData === null || flatSaveData.length === 0) {
+  if ( flatSaveData.length === 0 && !isLoading) {
     return (
       <SafeAreaView className="flex-1 items-center justify-center bg-black">
         <View className="font-semibold text-green-500">
@@ -27,11 +27,21 @@ const WatchList: FC = () => {
     );
   }
 
-  if (isError || isLoadingError || isLoading ) {
+  if ( isLoading ) {
     return (
       <View className='flex-1 justify-center items-center'>
           <ActivityIndicator size='large' color={'white'}/>
       </ View>
+    );
+  }
+
+  if(isError) {
+     return (
+      <SafeAreaView className="flex-1 items-center justify-center bg-black">
+        <View className="font-semibold text-green-500">
+          <Text className=" font-bold text-2xl text-red-150">Oops! Something went wrong </Text>
+        </View>
+      </SafeAreaView>
     );
   }
 

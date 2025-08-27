@@ -1,5 +1,6 @@
 import { GenreComponent } from '@/components/GenreComponent';
 import { WhereToWatch } from '@/components/WhereToWatch';
+import { useOrientation } from '@/hooks/useDevice';
 import { useSavedMediaExists } from '@/hooks/useMedia';
 import { useMovieDetails } from '@/hooks/useMovies';
 import { useAddToWatchlist, useRemoveFromWatchlist } from '@/hooks/useMutations';
@@ -7,7 +8,7 @@ import { useWatchProviders } from '@/hooks/useTv';
 import { Genres, Movie } from '@/interfaces';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { FC } from 'react';
-import { ActivityIndicator, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, ImageBackground, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const MovieDetails: FC<Movie> = () => {
@@ -32,6 +33,8 @@ const MovieDetails: FC<Movie> = () => {
     isLoading: isLoadingSavedExists,
     isError: isErrorSavedExists,
   } = useSavedMediaExists(Number(id));
+
+  const orientation = useOrientation();
 
   const { mutate: addToWatchlist } = useAddToWatchlist();
 
@@ -58,16 +61,18 @@ const MovieDetails: FC<Movie> = () => {
 
   const genresFlatData = movieData.genres.map((genre: Genres) => genre.name).join(', ');
 
+  
+
   return (
     <SafeAreaView className=" flex-1 bg-black">
-      <View className="items-center justify-center -mt-16 bg-black -bottom-4">
+      <ImageBackground className="items-center justify-center flex-1 portrait:-mt-14 bg-black -bottom-4" source={{uri : orientation === 'landscape' && movieData.poster_path ? `https://image.tmdb.org/t/p/w500${movieData.poster_path}` : 'https://via.placeholder.com/150' }} resizeMode='cover'>
         <ScrollView
           className="w-full mb-[4.5rem]"
-          contentOffset={{ x: 0, y: 100 }}
+          contentOffset={{ x: 0, y: 180 }}
           showsVerticalScrollIndicator={false}
         >
-          <View className="items-center  mt-10 px-4">
-            <View className="w-screen rounded-lg">
+          <View className="items-center  landscape:mt-10 px-4">
+            <View className="w-screen rounded-lg landscape:hidden">
               <Image
                 source={{
                   uri: movieData.poster_path
@@ -139,12 +144,12 @@ const MovieDetails: FC<Movie> = () => {
         </ScrollView>
 
         <TouchableOpacity
-          className="absolute flex-row items-center justify-center bg-red-150 p-3 w-4/5 rounded-lg bottom-0"
+          className="absolute flex-row items-center justify-center bg-red-150 p-3 w-4/5 rounded-lg bottom-2"
           onPress={() => router.back()}
         >
           <Text className="text-white text-base font-semibold">Go Back</Text>
         </TouchableOpacity>
-      </View>
+      </ImageBackground>
     </SafeAreaView>
   );
 };

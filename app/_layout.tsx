@@ -26,7 +26,7 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <Stack
           screenOptions={{
-            contentStyle: { backgroundColor: 'transparent', paddingTop: 50 },
+            contentStyle: { backgroundColor: 'transparent' },
           }}
         >
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

@@ -1,12 +1,13 @@
-import { View, Text, FlatList, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
-import React from 'react';
-import VerticalMediaCardWithLink from '@/components/VerticalMediaCardWithLink';
-import { useMovies } from '@/hooks/useMovies';
-import SearchBar from '../../components/Search';
-import { checkSearchData } from '@/services/appwrite';
-import { useTv } from '@/hooks/useTv';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SearchHistory } from '@/components/SearchHistory';
+import VerticalMediaCardWithLink from '@/components/VerticalMediaCardWithLink';
+import { useOrientation } from '@/hooks/useDevice';
+import { useMovies } from '@/hooks/useMovies';
+import { useTv } from '@/hooks/useTv';
+import { checkSearchData } from '@/services/appwrite';
+import React from 'react';
+import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import SearchBar from '../../components/Search';
 
 const Search = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -39,8 +40,10 @@ const Search = () => {
 
   const shouldShowHistory = showHistory || searchQuery.trim().length === 0;
 
+  const orientation = useOrientation()
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#000000' }} edges={['bottom']}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#000000' }} edges={['bottom']} className = {`landscape:px-8 pt-10`}>
       <View>
         <View className="w-full flex-row justify-center items-center gap-x-4">
           <Image
@@ -50,7 +53,8 @@ const Search = () => {
           />
           <Text className="text-red-600 text-2xl">Find what to watch!</Text>
         </View>
-        <View className="m-6 h-16">
+        <View className='landscape:flex-row landscape:justify-center landscape:items-center'>
+        <View className="m-6 h-16 landscape:flex-[2]">
           <SearchBar
             value={searchQuery}
             onChangeText={(text: string) => setSearchQuery(text)}
@@ -80,19 +84,20 @@ const Search = () => {
             <Text>TV</Text>
           </TouchableOpacity>
         </View>
+        </View>
 
         {isErrorsearched && (
           <Text className="text-red-500">{`Something went wrong! ${searchedMovieError.message} `}</Text>
         )}
 
-        <Text className="text-lg font-bold text-center my-3 flex flex-row text-white">
+       {orientation === 'potrait' ? <Text className={`text-lg font-bold text-center my-3 flex flex-row text-white`}>
           {!isErrorsearched && !isLoadingsearchedData && searchQuery.trim()
             ? `Search Results for "${searchQuery}"`
             : isLoadingsearchedData
               ? `Searching for ${searchQuery}`
               : 'Previous Search Results'}
           {isLoadingsearchedData && <ActivityIndicator color="#3b82f6" className="m-3" />}
-        </Text>
+        </Text> : null}
       </View>
       <View className="flex-1">
         {shouldShowHistory ? (

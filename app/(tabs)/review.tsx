@@ -32,6 +32,7 @@ const Review = () => {
       <View className='w-full bg-black flex items-center justify-center'>
       <Text className="text-4xl font-semibold text-red-150 mt-1">Review !</Text>
       </View>
+
     <KeyboardAwareScrollView
       className="bg-black"
       enableOnAndroid={true}

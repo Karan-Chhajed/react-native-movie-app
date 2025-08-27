@@ -3,7 +3,7 @@
     "name": "Movie Pal",
     "slug": "movie-pal",
     "version": "3.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/images/cinema.png",
     "scheme": "movie",
     "userInterfaceStyle": "automatic",
