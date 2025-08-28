@@ -6,7 +6,7 @@ import { useTvById, useWatchProviders } from '@/hooks/useTv';
 import { TvSeries } from '@/interfaces';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { FC } from 'react';
-import { ActivityIndicator, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const TvDetails: FC<TvSeries> = () => {
@@ -136,7 +136,7 @@ const TvDetails: FC<TvSeries> = () => {
           </View>
         </ScrollView>
         <TouchableOpacity
-          className="absolute flex-row items-center justify-center bg-red-150 p-3 w-4/5 rounded-lg bottom-0"
+          className={`absolute flex-row items-center justify-center bg-red-150 p-3 w-4/5 rounded-lg ${Platform.OS === 'ios' ? 'bottom-0': 'bottom-4'}`}
           onPress={() => router.back()}
         >
           <Text className="text-white text-base font-semibold">Go Back</Text>

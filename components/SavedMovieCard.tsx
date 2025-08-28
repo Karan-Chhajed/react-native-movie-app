@@ -1,7 +1,7 @@
 import { useRemoveFromWatchlist } from '@/hooks/useMutations';
 import { Link } from 'expo-router';
 import React, { FC } from 'react';
-import { View, Image, Text, ImageBackground, TouchableOpacity } from 'react-native';
+import { Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
 
 interface SavedMovieCardProps {
   name: string;
@@ -30,7 +30,8 @@ const SavedMovieCard: FC<SavedMovieCardProps> = ({
         <ImageBackground
           source={{ uri: `https://image.tmdb.org/t/p/w500${posterUrl}` }}
           className="w-full border border-gray-400 gap-6 my-2 p-2 bg-slate-400 rounded-2xl h-44"
-          imageStyle={{ borderRadius: 12 }}
+          imageStyle={{ borderRadius: 12}}
+          resizeMode='cover'
         >
           <View className="flex-1 justify-between">
             <View className="flex flex-row items-center justify-between">

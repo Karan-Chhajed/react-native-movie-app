@@ -16,8 +16,8 @@ const Richtext = () => {
     // richtext is webview and hence doesnt automatically change content state on zustand reset, so I call it again and set it to blank using content Html 
 
     return(
-        <View>
-            <RichEditor ref={richText} placeholder="Your Comments here..." initialContentHTML={comments} onChange={setComments} editorStyle={{contentCSSText: "min-height: 160px "}}/>
+        <View className="w-full">
+            <RichEditor ref={richText} placeholder="Your Comments here..." initialContentHTML={comments} onChange={setComments} editorStyle={{contentCSSText: "min-height: 160px"}}/>
             <RichToolbar editor={richText}
                 actions = {[
                     actions.setBold,

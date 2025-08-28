@@ -1,8 +1,10 @@
-import { Text, View, Image, ActivityIndicator, ScrollView } from 'react-native';
-import { usePopularMovies, useTrendingMovies } from '@/hooks/useMovies';
-import React from 'react';
 import HorizontalList from '@/components/HorizontalList';
+import { useOrientation } from '@/hooks/useDevice';
+import { usePopularMovies, useTrendingMovies } from '@/hooks/useMovies';
 import { useTrendingTvSeries, useTvSeries } from '@/hooks/useTv';
+import React from 'react';
+import { ActivityIndicator, Image, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Index() {
   const {
@@ -33,13 +35,26 @@ export default function Index() {
     error: trendingTvError,
   } = useTrendingTvSeries('day');
 
+  const orientation = useOrientation()
+
   return (
-    <View className="flex-1 items-center justify-start px-4 bg-black">
+    <SafeAreaView className={`flex-1 items-center justify-start h-full bg-black`}>
+      {orientation === 'potrait' ? 
+      
       <Image
         source={require('../../assets/images/cinema.png')}
         className="w-20 h-20 mb-6"
         resizeMode="contain"
+      /> :
+        <View className='flex flex-row w-full justify-center items-center gap-x-6 mt-0'>
+            <Image
+        source={require('../../assets/images/cinema.png')}
+        className="w-12 h-12 mb-4"
+        resizeMode="contain"
       />
+       <Text className='text-lg font-bold text-white'>Movie Pal</Text>
+        </View>
+      }
 
       {isPopularMoviesError && (
         <Text className="text-red-500">{popularMoviesDataError?.message}</Text>
@@ -59,7 +74,7 @@ export default function Index() {
           <HorizontalList mediaData={trendingTvData} listTitle="Trending TV Series" type="TV" />
         </ScrollView>
       )}
-    </View>
+    </SafeAreaView>
     // ScrollView is good for static, Flatlist is virtualized. I know its bad practice to render, but I wanted to demonstrate that while its possible
     // it comes with a downside, you lose the virtualization ability of flatlist. On prod, when I have limited elements, Scrollview is the way to go
   );

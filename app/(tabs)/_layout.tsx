@@ -1,4 +1,5 @@
 import InfoModal from '@/components/InfoModal';
+import { useOrientation } from '@/hooks/useDevice';
 import { Tabs } from 'expo-router';
 import { useState } from 'react';
 import { Image, Pressable, Text } from 'react-native';
@@ -7,6 +8,8 @@ export default function _Layout() {
   const [showInfo, setShowInfo] = useState(false);
   //I tried redering modal outside, hence state was required. Discussion here is possible, although expo lint will throw an error here
 
+  const orientation = useOrientation()
+
   return (
     <>
       <Tabs
@@ -14,11 +17,15 @@ export default function _Layout() {
           tabBarStyle: {
             backgroundColor: 'transparent',
             borderTopWidth: 0,
-            height: 65,
+            height: orientation === 'potrait' ? 65 : 55,
             paddingBottom: 1,
+            alignContent: 'flex-end'
           },
           tabBarActiveTintColor: 'white',
           tabBarInactiveTintColor: 'red',
+          tabBarIconStyle: {
+            marginTop: 0
+          }
         }}
       >
         <Tabs.Screen
@@ -82,7 +89,7 @@ export default function _Layout() {
       </Tabs>
       {/*While this can be done in header as well, using state.*/}
       <Pressable
-        className="absolute top-16 right-3 z-10 h-6 w-6 mt-1 border border-white rounded-full items-center justify-center"
+        className={`absolute ${orientation === 'potrait' ? 'top-10 right-3' : 'top-4 right-2'} z-10 h-6 w-6 mt-1 border border-white rounded-full items-center justify-center`}
         onPress={() => setShowInfo(true)}
       >
         <Text className="text-white text-xs font-bold">i</Text>
