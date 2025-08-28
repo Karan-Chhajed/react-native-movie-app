@@ -8,7 +8,7 @@ import { useWatchProviders } from '@/hooks/useTv';
 import { Genres, Movie } from '@/interfaces';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { FC } from 'react';
-import { ActivityIndicator, Image, ImageBackground, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, ImageBackground, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const MovieDetails: FC<Movie> = () => {
@@ -122,8 +122,6 @@ const MovieDetails: FC<Movie> = () => {
               </View>
               <View className="flex-row items-center justify-between w-full py-2">
                 <Text className="text-sm text-gray-400 ">Runtime: {movieData.runtime} mins</Text>
-                {/* <Text className="text-sm text-gray-400">{movieDetailsData.release_date.split('-')[0] ?? 'N/A'}</Text> */}
-
                 <View className="flex-row items-center justify-center gap-x-1">
                   <Image source={require('../../assets/images/star.png')} className="size-4" />
                   <Text className="text-sm text-white">
@@ -144,7 +142,7 @@ const MovieDetails: FC<Movie> = () => {
         </ScrollView>
 
         <TouchableOpacity
-          className="absolute flex-row items-center justify-center bg-red-150 p-3 w-4/5 rounded-lg bottom-2"
+          className={`absolute flex-row items-center justify-center bg-red-150 p-3 w-4/5 rounded-lg ${Platform.OS === 'ios' ? 'bottom-2' : 'bottom-8'}`}
           onPress={() => router.back()}
         >
           <Text className="text-white text-base font-semibold">Go Back</Text>

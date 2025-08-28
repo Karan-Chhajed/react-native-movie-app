@@ -30,7 +30,7 @@ const Review = () => {
   return (
     <View className='flex-1'>
       <View className='w-full bg-black flex items-center justify-center'>
-      <Text className="text-4xl font-semibold text-red-150 mt-1">Review !</Text>
+      <Text className="text-4xl font-semibold text-red-150 portrait:mt-10">Review !</Text>
       </View>
 
     <KeyboardAwareScrollView
@@ -42,7 +42,7 @@ const Review = () => {
       style={{ flex: 1 }}
       extraScrollHeight={30}
     >
-      <View className="flex-1 items-center px-6">
+      <View className="flex-1 items-center landscape:px-14 px-6">
         
 
         <View className="w-full flex mt-6 gap-y-6 items-center">

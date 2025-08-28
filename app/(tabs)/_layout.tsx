@@ -17,8 +17,8 @@ export default function _Layout() {
           tabBarStyle: {
             backgroundColor: 'transparent',
             borderTopWidth: 0,
-            height: orientation === 'potrait' ? 65 : 35,
-            paddingBottom: orientation === 'potrait' ? 1 : 50,
+            height: orientation === 'potrait' ? 65 : 55,
+            paddingBottom: 1,
             alignContent: 'flex-end'
           },
           tabBarActiveTintColor: 'white',
