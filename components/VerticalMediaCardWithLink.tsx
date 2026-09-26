@@ -1,60 +1,60 @@
+import Artwork from '@/components/Artwork';
+import { usePrefetchMedia } from '@/hooks/usePrefetchMedia';
+import { MediaKind } from '@/interfaces';
+import { MEDIA_KIND_LABEL, mediaHref, tmdbImageUrl, toFiveStarRating } from '@/utils/media';
 import { Link } from 'expo-router';
 import { FC } from 'react';
-import VerticalMediaCard from '@/components/VerticalMediaCard';
-import { TouchableOpacity } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 
-interface VerticalMediaCardProps {
+interface VerticalMediaCardWithLinkProps {
   id: number | string;
   title: string;
+  type: MediaKind;
   release_date?: string;
-  overview?: string;
   poster_path?: string;
   vote_average?: number;
-  type: string;
 }
 
-const VerticalMediaCardWithLink: FC<VerticalMediaCardProps> = ({
+const VerticalMediaCardWithLink: FC<VerticalMediaCardWithLinkProps> = ({
   id,
   title,
-  release_date,
-  vote_average,
-  overview,
-  poster_path,
   type,
+  release_date,
+  poster_path,
+  vote_average,
 }) => {
-  const mediaType = type.toLowerCase();
-  // Expo router nuance, Link will only work if if the immediate child is a Pressable or Touchable ! So weird! Will not work if its a different child
-  // even though the parent on nested element is Touchable or pressable!
-  if (mediaType === 'movie') {
-    return (
-      <Link href={`/movies/${id}`} asChild className="py-4">
-        <TouchableOpacity className="w-28 h-56 flex-1 my-6">
-          <VerticalMediaCard
-            title={title}
-            release_date={release_date}
-            vote_average={vote_average}
-            overview={overview}
-            poster_path={poster_path}
-            type={type}
-          />
-        </TouchableOpacity>
-      </Link>
-    );
-  } else if (mediaType === 'tv') {
-    return (
-      <Link href={`/tv/${id}`} asChild className="py-4">
-        <TouchableOpacity className="w-28 h-56 flex-1 my-6">
-          <VerticalMediaCard
-            title={title}
-            poster_path={poster_path}
-            vote_average={vote_average}
-            type={type}
-            overview={overview}
-          />
-        </TouchableOpacity>
-      </Link>
-    );
-  }
+  const prefetchMedia = usePrefetchMedia();
+  const year = release_date?.split('-')[0];
+  const rating = toFiveStarRating(vote_average);
+  const kindLabel = MEDIA_KIND_LABEL[type];
+  const accessibilityLabel = [title, kindLabel, year, rating && `rated ${rating} out of 5`]
+    .filter(Boolean)
+    .join(', ');
+
+  return (
+    // Link's asChild requires the pressable to be its direct child.
+    <Link href={mediaHref(type, id)} asChild>
+      <TouchableOpacity
+        className="w-28 h-56 flex-1 my-6 py-4"
+        onPressIn={() => prefetchMedia(type, id)}
+        accessibilityRole="link"
+        accessibilityLabel={accessibilityLabel}
+      >
+        <Artwork uri={tmdbImageUrl(poster_path, 'w342')} className="w-full h-40 rounded-lg mb-2" />
+        <Text className="text-sm font-semibold text-white" numberOfLines={1}>
+          {title}
+        </Text>
+        <View className="flex-row items-center justify-start gap-x-1">
+          <Text className="text-sm text-white">{rating ?? 'N/A'}</Text>
+          <Image source={require('../assets/images/star.png')} className="size-4" />
+        </View>
+        <View className="flex-row items-center justify-between mt-1">
+          {year ? <Text className="text-xs text-gray-400 font-medium">{year}</Text> : null}
+          <Text className="text-xs text-gray-400 font-medium">{kindLabel}</Text>
+        </View>
+      </TouchableOpacity>
+    </Link>
+  );
 };
 
 export default VerticalMediaCardWithLink;

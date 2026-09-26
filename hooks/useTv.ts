@@ -5,7 +5,7 @@ import {
   fetchTvDetails,
   fetchWatchProviders,
 } from '@/services/api';
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { queryOptions, useQuery } from '@tanstack/react-query';
 
 export const useTvSeries = (query: string = '') => {
   return useQuery({
@@ -32,35 +32,41 @@ export const useTv = (query: string) => {
     queryKey: ['SearchedTv', query],
     queryFn: () => fetchTvData({ query }),
     retry: 2,
+    enabled: query !== '',
     staleTime: 60 * 60 * 1000,
     gcTime: 1000 * 60 * 60 * 2,
   });
 };
 
-export const useTvById = (series_id: string, options?: Partial<UseQueryOptions<any>>) => {
-  return useQuery<TvSeries>({
+// Shared with usePrefetchMedia so a prefetch fills the exact cache entry the screen reads.
+export const tvDetailsQueryOptions = (series_id: string) =>
+  queryOptions({
     queryKey: ['TvDetails', series_id],
-    queryFn: () => fetchTvDetails(series_id),
-    enabled: !!series_id,
+    queryFn: (): Promise<TvSeries> => fetchTvDetails(series_id),
     retry: 2,
     staleTime: 60 * 60 * 1000,
     gcTime: 1000 * 60 * 60 * 2,
-    ...options,
+  });
+
+export const watchProvidersQueryOptions = (series_id: string, platform: 'tv' | 'movie') =>
+  queryOptions({
+    queryKey: ['WatchProviders', series_id],
+    queryFn: (): Promise<WatchData> => fetchWatchProviders(series_id, platform),
+    retry: 2,
+    staleTime: 60 * 60 * 1000,
+    gcTime: 1000 * 60 * 60 * 2,
+  });
+
+export const useTvById = (series_id: string) => {
+  return useQuery({
+    ...tvDetailsQueryOptions(series_id),
+    enabled: !!series_id,
   });
 };
 
-export const useWatchProviders = (
-  series_id: string,
-  platform: 'tv' | 'movie',
-  options?: Partial<UseQueryOptions<any>>,
-) => {
-  return useQuery<WatchData>({
-    queryKey: ['WatchProviders', series_id],
-    queryFn: () => fetchWatchProviders(series_id, platform),
+export const useWatchProviders = (series_id: string, platform: 'tv' | 'movie') => {
+  return useQuery({
+    ...watchProvidersQueryOptions(series_id, platform),
     enabled: !!series_id,
-    retry: 2,
-    staleTime: 60 * 60 * 1000,
-    gcTime: 1000 * 60 * 60 * 2,
-    ...options,
   });
 };

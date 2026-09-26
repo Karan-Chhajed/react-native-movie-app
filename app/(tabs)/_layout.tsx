@@ -2,22 +2,32 @@ import InfoModal from '@/components/InfoModal';
 import { useOrientation } from '@/hooks/useDevice';
 import { Tabs } from 'expo-router';
 import { useState } from 'react';
-import { Image, Pressable, Text } from 'react-native';
+import { ColorValue, Image, ImageSourcePropType, Pressable, Text } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-export default function _Layout() {
+const tabIcon = (source: ImageSourcePropType) => {
+  const TabIcon = ({ color }: { color: ColorValue }) => (
+    <Image source={source} className="w-8 h-8" tintColor={color} />
+  );
+  return TabIcon;
+};
+
+export default function TabLayout() {
   const [showInfo, setShowInfo] = useState(false);
-  //I tried redering modal outside, hence state was required. Discussion here is possible, although expo lint will throw an error here
-
-  const orientation = useOrientation()
+  const orientation = useOrientation();
+  const insets = useSafeAreaInsets();
 
   return (
     <>
       <Tabs
         screenOptions={{
+          headerShown: false,
           tabBarStyle: {
-            backgroundColor: 'transparent',
+            // Match the screens' bg-black. A transparent bar shows the navigator's
+            // default (light) theme behind it, which renders white.
+            backgroundColor: '#000000',
             borderTopWidth: 0,
-            height: orientation === 'potrait' ? 65 : 55,
+            height: orientation === 'portrait' ? 65 : 55,
             paddingBottom: 1,
             alignContent: 'flex-end'
           },
@@ -31,66 +41,41 @@ export default function _Layout() {
         <Tabs.Screen
           name="index"
           options={{
-            headerShown: false,
             tabBarLabel: 'Home',
-            tabBarIcon: ({ focused, color }) => (
-              <Image
-                source={require('../../assets/images/home.png')}
-                className="w-8 h-8"
-                style={{ tintColor: color }}
-              />
-            ),
+            tabBarIcon: tabIcon(require('../../assets/images/home.png')),
           }}
         />
         <Tabs.Screen
           name="search"
           options={{
-            headerShown: false,
             tabBarLabel: 'Search',
-            tabBarIcon: ({ focused, color }) => (
-              <Image
-                source={require('../../assets/images/search.png')}
-                className="w-8 h-8"
-                tintColor={color}
-              />
-            ),
+            tabBarIcon: tabIcon(require('../../assets/images/search.png')),
           }}
         />
-
         <Tabs.Screen
           name="watchlist"
           options={{
-            headerShown: false,
             tabBarLabel: 'Saved',
-            tabBarIcon: ({ focused, color }) => (
-              <Image
-                source={require('../../assets/images/saved.png')}
-                className="w-8 h-8"
-                tintColor={color}
-              />
-            ),
+            tabBarIcon: tabIcon(require('../../assets/images/saved.png')),
           }}
         />
-
         <Tabs.Screen
           name="review"
           options={{
-            headerShown: false,
             tabBarLabel: 'Review',
-            tabBarIcon: ({ focused, color }) => (
-              <Image
-                source={require('../../assets/images/profile.png')}
-                className="w-8 h-8"
-                tintColor={color}
-              />
-            ),
+            tabBarIcon: tabIcon(require('../../assets/images/profile.png')),
           }}
         />
       </Tabs>
-      {/*While this can be done in header as well, using state.*/}
+      {/* Rendered over the tabs so it is reachable from every screen. */}
       <Pressable
-        className={`absolute ${orientation === 'potrait' ? 'top-10 right-3' : 'top-4 right-2'} z-10 h-6 w-6 mt-1 border border-white rounded-full items-center justify-center`}
+        className="absolute z-10 h-6 w-6 border border-white rounded-full items-center justify-center"
+        // Keeps the button clear of the status bar, notch and rounded corners in either orientation.
+        style={{ top: Math.max(insets.top, 12) + 4, right: insets.right + 12 }}
+        hitSlop={10}
         onPress={() => setShowInfo(true)}
+        accessibilityRole="button"
+        accessibilityLabel="About this app"
       >
         <Text className="text-white text-xs font-bold">i</Text>
       </Pressable>

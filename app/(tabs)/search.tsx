@@ -3,17 +3,23 @@ import VerticalMediaCardWithLink from '@/components/VerticalMediaCardWithLink';
 import { useOrientation } from '@/hooks/useDevice';
 import { useMovies } from '@/hooks/useMovies';
 import { useTv } from '@/hooks/useTv';
+import { MediaKind } from '@/interfaces';
 import { checkSearchData } from '@/services/appwrite';
 import React from 'react';
 import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import SearchBar from '../../components/Search';
 
+const MEDIA_OPTIONS: { kind: MediaKind; label: string }[] = [
+  { kind: 'movie', label: 'Movies' },
+  { kind: 'tv', label: 'TV' },
+];
+
 const Search = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [debouncedQuery, setDebouncedQuery] = React.useState('');
   const [showHistory, setShowHistory] = React.useState<boolean>(true);
-  const [mediaType, setmediaType] = React.useState<string>('movie');
+  const [mediaType, setMediaType] = React.useState<MediaKind>('movie');
 
   const insets = useSafeAreaInsets();
 
@@ -25,25 +31,29 @@ const Search = () => {
     return () => clearTimeout(handler);
   }, [searchQuery]);
 
+  // Both searches are always declared so hook order stays stable; only the active one runs.
+  const movieSearch = useMovies(mediaType === 'movie' ? debouncedQuery : '');
+  const tvSearch = useTv(mediaType === 'tv' ? debouncedQuery : '');
   const {
     data: searchedData,
     isLoading: isLoadingsearchedData,
     isError: isErrorsearched,
     error: searchedMovieError,
-  } = mediaType === 'movie' ? useMovies(debouncedQuery) : useTv(debouncedQuery);
+  } = mediaType === 'movie' ? movieSearch : tvSearch;
 
   React.useEffect(() => {
-    if (searchedData && searchedData.length > 0 && searchedData[0]) {
-      checkSearchData(debouncedQuery, searchedData[0], mediaType);
-    }
-  }, [searchQuery, searchedData]);
+    const topResult = searchedData?.[0];
+    if (!debouncedQuery || !topResult) return;
+    // Search history is best-effort; a failed write shouldn't interrupt searching.
+    checkSearchData(debouncedQuery, topResult, mediaType).catch(() => {});
+  }, [debouncedQuery, searchedData, mediaType]);
 
   const shouldShowHistory = showHistory || searchQuery.trim().length === 0;
 
   const orientation = useOrientation()
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#000000' }} edges={['bottom']} className = {`landscape:px-8 pt-10`}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#000000' }} edges={['top', 'bottom']} className = {`landscape:px-8 pt-4`}>
       <View>
         <View className="w-full flex-row justify-center items-center gap-x-4">
           <Image
@@ -57,6 +67,7 @@ const Search = () => {
         <View className="m-6 h-16 landscape:flex-[2]">
           <SearchBar
             value={searchQuery}
+            placeholder={mediaType === 'movie' ? 'Search for movies...' : 'Search for TV shows...'}
             onChangeText={(text: string) => setSearchQuery(text)}
             onFocus={() => setShowHistory(false)}
             onBlur={() => {
@@ -68,21 +79,21 @@ const Search = () => {
             }}
           />
         </View>
-        <View className="flex flex-row gap-x-4 px-4 mb-2">
-          <TouchableOpacity
-            className={`w-24 h-10 disabled:bg-red-600 bg-white justify-center items-center rounded-2xl`}
-            disabled={mediaType === 'movie'}
-            onPressIn={() => setmediaType('movie')}
-          >
-            <Text>Movies</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            className="w-24 h-10 disabled:bg-red-600 justify-center bg-white items-center rounded-2xl"
-            disabled={mediaType === 'tv'}
-            onPressIn={() => setmediaType('tv')}
-          >
-            <Text>TV</Text>
-          </TouchableOpacity>
+        <View className="flex flex-row gap-x-4 px-4 mb-2" accessibilityRole="tablist">
+          {MEDIA_OPTIONS.map(({ kind, label }) => {
+            const selected = mediaType === kind;
+            return (
+              <TouchableOpacity
+                key={kind}
+                className={`w-24 h-10 justify-center items-center rounded-2xl ${selected ? 'bg-red-600' : 'bg-white'}`}
+                onPress={() => setMediaType(kind)}
+                accessibilityRole="tab"
+                accessibilityState={{ selected }}
+              >
+                <Text>{label}</Text>
+              </TouchableOpacity>
+            );
+          })}
         </View>
         </View>
 
@@ -90,7 +101,7 @@ const Search = () => {
           <Text className="text-red-500">{`Something went wrong! ${searchedMovieError.message} `}</Text>
         )}
 
-       {orientation === 'potrait' ? <Text className={`text-lg font-bold text-center my-3 flex flex-row text-white`}>
+       {orientation === 'portrait' ? <Text className={`text-lg font-bold text-center my-3 flex flex-row text-white`}>
           {!isErrorsearched && !isLoadingsearchedData && searchQuery.trim()
             ? `Search Results for "${searchQuery}"`
             : isLoadingsearchedData
@@ -121,7 +132,6 @@ const Search = () => {
               <VerticalMediaCardWithLink
                 id={item.id}
                 title={'title' in item ? item.title : item.name}
-                overview={item.overview}
                 poster_path={item.poster_path}
                 release_date={'release_date' in item ? item.release_date : item.first_air_date}
                 vote_average={item.vote_average}

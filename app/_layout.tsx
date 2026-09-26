@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import * as NavigationBar from 'expo-navigation-bar';
+import { NavigationBar } from 'expo-navigation-bar';
 import { Stack } from 'expo-router';
 import { useEffect } from 'react';
 import { Platform } from 'react-native';
@@ -11,14 +11,11 @@ const queryClient = new QueryClient();
 
 export default function RootLayout() {
   useEffect(() => {
-    const hideNavBar = async () => {
-      if (Platform.OS === 'android') {
-        await NavigationBar.setVisibilityAsync('hidden');
-        await NavigationBar.setBehaviorAsync('inset-swipe');
-        await NavigationBar.setBackgroundColorAsync('transparent');
-      }
-    };
-    hideNavBar();
+    // Edge-to-edge is mandatory since SDK 55, so the bar is already transparent;
+    // the behavior/background setters were removed in SDK 56.
+    if (Platform.OS === 'android') {
+      NavigationBar.setHidden(true);
+    }
   }, []);
 
   return (
@@ -26,7 +23,9 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <Stack
           screenOptions={{
-            contentStyle: { backgroundColor: 'transparent' },
+            // A screen that is still loading must slide in over black, not the navigator's
+            // default (light) theme.
+            contentStyle: { backgroundColor: '#000000' },
           }}
         >
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

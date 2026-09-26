@@ -1,4 +1,4 @@
-import { Movie, TvSeries } from '@/interfaces';
+import { MediaKind, Movie, TvSeries } from '@/interfaces';
 import { View, FlatList, Text } from 'react-native';
 import { FC } from 'react';
 import VerticalMediaCardWithLink from './VerticalMediaCardWithLink';
@@ -8,13 +8,17 @@ type MediaData = Movie | TvSeries;
 interface HorizontalListProps {
   mediaData: MediaData[];
   listTitle: string;
-  type: string;
+  type: MediaKind;
 }
+
+const ItemSeparator = () => <View className="w-4" />;
 
 const HorizontalList: FC<HorizontalListProps> = ({ mediaData, listTitle, type }) => {
   return (
     <View className="my-2">
-      <Text className="px-2 font-semibold text-lg text-white">{listTitle}</Text>
+      <Text className="px-2 font-semibold text-lg text-white" accessibilityRole="header">
+        {listTitle}
+      </Text>
       <FlatList
         data={mediaData}
         horizontal
@@ -30,7 +34,7 @@ const HorizontalList: FC<HorizontalListProps> = ({ mediaData, listTitle, type })
           />
         )}
         contentContainerClassName="flex flex-row gap-x-4 px-2"
-        ItemSeparatorComponent={() => <View className="w-4" />}
+        ItemSeparatorComponent={ItemSeparator}
         showsHorizontalScrollIndicator={false}
       />
     </View>

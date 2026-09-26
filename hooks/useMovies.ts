@@ -1,7 +1,6 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { queryOptions, useQuery } from '@tanstack/react-query';
 import { fetchMovieDetails, fetchMovies, fetchTrendingMovies } from '@/services/api';
 import { getSearchedMovies } from '@/services/appwrite';
-import { Movie } from '@/interfaces';
 
 export const usePopularMovies = (query: string = '') => {
   return useQuery({
@@ -29,15 +28,20 @@ export const useMovies = (query: string) => {
   });
 };
 
-export const useMovieDetails = (movie_id: string, options?: Partial<UseQueryOptions<Movie>>) => {
-  return useQuery({
+// Shared with usePrefetchMedia so a prefetch fills the exact cache entry the screen reads.
+export const movieDetailsQueryOptions = (movie_id: string) =>
+  queryOptions({
     queryKey: ['movieDetails', movie_id],
     queryFn: () => fetchMovieDetails(movie_id),
     retry: 2,
+    staleTime: 1000 * 60 * 60,
+  });
+
+export const useMovieDetails = (movie_id: string) => {
+  return useQuery({
+    ...movieDetailsQueryOptions(movie_id),
     enabled: !!movie_id,
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 60,
-    ...options,
   });
 };
 

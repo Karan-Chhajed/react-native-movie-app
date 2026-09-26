@@ -22,12 +22,11 @@ export interface Genres {
   name: string;
 }
 
-export interface MediaType {
-  mediaType: 'movie' | 'tv';
-}
+export type MediaKind = 'movie' | 'tv';
 
 export interface SearchedMedia {
-  searchtTerm: string;
+  $id: string;
+  searchTerm: string;
   id: string;
   title: string;
   posterUrl: string;
@@ -78,9 +77,9 @@ export interface TvSeries {
 }
 
 export interface ProviderData {
+  provider_id: number;
   provider_name: string;
   logo_path: string;
-  provider_name: string;
   display_priority: number;
 }
 

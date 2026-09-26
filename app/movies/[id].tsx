@@ -1,17 +1,18 @@
+import Artwork from '@/components/Artwork';
 import { GenreComponent } from '@/components/GenreComponent';
+import WatchlistButton from '@/components/WatchlistButton';
 import { WhereToWatch } from '@/components/WhereToWatch';
 import { useOrientation } from '@/hooks/useDevice';
-import { useSavedMediaExists } from '@/hooks/useMedia';
 import { useMovieDetails } from '@/hooks/useMovies';
-import { useAddToWatchlist, useRemoveFromWatchlist } from '@/hooks/useMutations';
 import { useWatchProviders } from '@/hooks/useTv';
-import { Genres, Movie } from '@/interfaces';
+import { tmdbImageUrl, toFiveStarRating } from '@/utils/media';
 import { router, useLocalSearchParams } from 'expo-router';
-import React, { FC } from 'react';
+import React, { useState } from 'react';
 import { ActivityIndicator, Image, ImageBackground, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const MovieDetails: FC<Movie> = () => {
+const MovieDetails = () => {
   const { id } = useLocalSearchParams();
 
   const {
@@ -28,21 +29,14 @@ const MovieDetails: FC<Movie> = () => {
     error: isWatchErrorData,
   } = useWatchProviders(id as string, 'movie');
 
-  const {
-    data: isSavedData,
-    isLoading: isLoadingSavedExists,
-    isError: isErrorSavedExists,
-  } = useSavedMediaExists(Number(id));
-
   const orientation = useOrientation();
 
-  const { mutate: addToWatchlist } = useAddToWatchlist();
-
-  const { mutate: removeFromWatchlist } = useRemoveFromWatchlist();
+  // Fade the page in only if it had to wait for data; cached pages are ready as the screen slides in.
+  const [fadeInOnLoad] = useState(() => isLoadingMovieData || isLoadingWatchData);
 
   if (isLoadingMovieData || isLoadingWatchData) {
     return (
-      <View className="flex-1 items-center justify-center">
+      <View className="flex-1 items-center justify-center bg-black">
         <ActivityIndicator color="#3b82f6" size="large" />
       </View>
     );
@@ -53,19 +47,22 @@ const MovieDetails: FC<Movie> = () => {
       [isMovieErrorData?.message, isWatchErrorData?.message].filter(Boolean).join(' | ') ||
       'Something went wrong!';
     return (
-      <View className="flex-1 items-center justify-center">
+      <View className="flex-1 items-center justify-center bg-black">
         <Text className="text-red-500">{message}</Text>
       </View>
     );
   }
 
-  const genresFlatData = movieData.genres.map((genre: Genres) => genre.name).join(', ');
-
-  
+  const posterUrl = tmdbImageUrl(movieData.poster_path, 'w500');
+  const rating = toFiveStarRating(movieData.vote_average);
 
   return (
+    <Animated.View
+      style={{ flex: 1, backgroundColor: '#000000' }}
+      entering={fadeInOnLoad ? FadeIn.duration(250) : undefined}
+    >
     <SafeAreaView className=" flex-1 bg-black">
-      <ImageBackground className="items-center justify-center flex-1 portrait:-mt-14 bg-black -bottom-4" source={{uri : orientation === 'landscape' && movieData.poster_path ? `https://image.tmdb.org/t/p/w500${movieData.poster_path}` : 'https://via.placeholder.com/150' }} resizeMode='cover'>
+      <ImageBackground className="items-center justify-center flex-1 portrait:-mt-14 bg-black -bottom-4" source={orientation === 'landscape' && posterUrl ? { uri: posterUrl } : undefined} resizeMode='cover'>
         <ScrollView
           className="w-full mb-[4.5rem]"
           contentOffset={{ x: 0, y: 180 }}
@@ -73,66 +70,41 @@ const MovieDetails: FC<Movie> = () => {
         >
           <View className="items-center  landscape:mt-10 px-4">
             <View className="w-screen rounded-lg landscape:hidden">
-              <Image
-                source={{
-                  uri: movieData.poster_path
-                    ? `https://image.tmdb.org/t/p/w500${movieData.poster_path}`
-                    : 'https://via.placeholder.com/150',
-                }}
-                className="w-full rounded-lg mb-2"
-                resizeMode="cover"
-                style={{ aspectRatio: 2 / 3 }}
-              />
+              <Artwork uri={posterUrl} className="w-full rounded-lg mb-2 aspect-[2/3]" />
             </View>
 
             <View className="mt-2 flex-col items-center justify-between w-full">
               <View className="flex-row items-center justify-between w-full">
-                <Text className="text-lg font-bold text-white flex-[2]">{movieData.title}</Text>
-                {isLoadingSavedExists ? (
-                  <>
-                    <ActivityIndicator size="small" color="#3b82f6" />
-                  </>
-                ) : (
-                  <TouchableOpacity
-                    className={`rounded-lg border flex-[1/2] mt-0 border-gray-400 px-2 ${isSavedData ? 'bg-white' : ''}`}
-                    disabled={isErrorSavedExists}
-                    onPress={() => {
-                      if (isSavedData) {
-                        removeFromWatchlist(id as string);
-                      } else {
-                        addToWatchlist({
-                          id: movieData.id,
-                          title: movieData.title,
-                          posterUrl: `https://image.tmdb.org/t/p/w500${movieData.poster_path}`,
-                          overview: movieData.overview,
-                          media_type: 'Movie',
-                          vote_average: movieData.vote_average,
-                          genres: genresFlatData,
-                        });
-                      }
-                    }}
-                  >
-                    <Text
-                      className={`text-sm font-light ${isSavedData ? 'text-black' : 'text-white'}`}
-                    >
-                      Watchlist
-                    </Text>
-                  </TouchableOpacity>
-                )}
+                <Text className="text-lg font-bold text-white flex-[2]" accessibilityRole="header">
+                  {movieData.title}
+                </Text>
+                <WatchlistButton
+                  media={{
+                    id: movieData.id,
+                    title: movieData.title,
+                    posterUrl: movieData.poster_path,
+                    overview: movieData.overview,
+                    media_type: 'Movie',
+                    vote_average: movieData.vote_average,
+                    genres: movieData.genres.map((genre) => genre.name).join(', '),
+                  }}
+                />
               </View>
               <View className="flex-row items-center justify-between w-full py-2">
                 <Text className="text-sm text-gray-400 ">Runtime: {movieData.runtime} mins</Text>
-                <View className="flex-row items-center justify-center gap-x-1">
+                <View
+                  className="flex-row items-center justify-center gap-x-1"
+                  accessible
+                  accessibilityLabel={rating ? `Rated ${rating} out of 5` : 'Not rated'}
+                >
                   <Image source={require('../../assets/images/star.png')} className="size-4" />
-                  <Text className="text-sm text-white">
-                    {movieData.vote_average ? Math.round(movieData.vote_average / 2) : 'N/A'} / 5
-                  </Text>
+                  <Text className="text-sm text-white">{rating ? `${rating} / 5` : 'N/A'}</Text>
                 </View>
               </View>
             </View>
             <View className="mt-4">
               <Text className="text-base font-semibold text-white">Overview</Text>
-              <Text className="text-sm text-gray-600 mt-2">{movieData.overview}</Text>
+              <Text className="text-sm text-gray-400 mt-2">{movieData.overview}</Text>
             </View>
             <WhereToWatch watchData={watchData} />
             <View className="w-full my-2">
@@ -144,11 +116,13 @@ const MovieDetails: FC<Movie> = () => {
         <TouchableOpacity
           className={`absolute flex-row items-center justify-center bg-red-150 p-3 w-4/5 rounded-lg ${Platform.OS === 'ios' ? 'bottom-2' : 'bottom-8'}`}
           onPress={() => router.back()}
+          accessibilityRole="button"
         >
           <Text className="text-white text-base font-semibold">Go Back</Text>
         </TouchableOpacity>
       </ImageBackground>
     </SafeAreaView>
+    </Animated.View>
   );
 };
 

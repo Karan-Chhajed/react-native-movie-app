@@ -39,7 +39,7 @@ export default function Index() {
 
   return (
     <SafeAreaView className={`flex-1 items-center justify-start h-full bg-black`}>
-      {orientation === 'potrait' ? 
+      {orientation === 'portrait' ? 
       
       <Image
         source={require('../../assets/images/cinema.png')}
@@ -68,10 +68,10 @@ export default function Index() {
         <ActivityIndicator size="large" color="#FFFFFF" />
       ) : (
         <ScrollView>
-          <HorizontalList mediaData={movieData} listTitle="Popular Movies" type="MOVIE" />
-          <HorizontalList mediaData={trendingMoviesData} listTitle="Trending Movies" type="MOVIE" />
-          <HorizontalList mediaData={tvData} listTitle="Popular TV Shows" type="TV" />
-          <HorizontalList mediaData={trendingTvData} listTitle="Trending TV Series" type="TV" />
+          <HorizontalList mediaData={movieData} listTitle="Popular Movies" type="movie" />
+          <HorizontalList mediaData={trendingMoviesData} listTitle="Trending Movies" type="movie" />
+          <HorizontalList mediaData={tvData} listTitle="Popular TV Shows" type="tv" />
+          <HorizontalList mediaData={trendingTvData} listTitle="Trending TV Series" type="tv" />
         </ScrollView>
       )}
     </SafeAreaView>

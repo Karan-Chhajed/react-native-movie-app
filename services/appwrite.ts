@@ -50,13 +50,13 @@ export const checkSearchData = async (
   }
 };
 
-export const getSearchedMovies = async (): Promise<SearchedMedia[] | undefined> => {
+export const getSearchedMovies = async (): Promise<SearchedMedia[]> => {
   try {
     const result = await databases.listDocuments(DATABASE_ID, COLLECTION_ID, [Query.limit(5)]);
     return result.documents as unknown as SearchedMedia[];
   } catch (error) {
-    console.log(error);
-    return undefined;
+    console.error('Error fetching search history:', error);
+    throw new Error('Failed to load search history');
   }
 };
 
